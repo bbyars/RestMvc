@@ -1,0 +1,9 @@
+*.resharper.user
+*.suo
+RestMvc/bin/
+RestMvc/obj/
+RestMvc.UnitTests/bin/
+RestMvc.UnitTests/obj/
+build/
+RestMvc/RestMvc.csproj.user
+RestMvc.UnitTests/RestMvc.UnitTests.csproj.user
