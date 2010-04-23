@@ -4,6 +4,5 @@ namespace RestMvc
 {
     public class RestfulController : Controller
     {
-        
     }
 }

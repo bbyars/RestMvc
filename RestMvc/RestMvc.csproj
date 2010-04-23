@@ -43,7 +43,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeleteAttribute.cs" />
+    <Compile Include="Attributes\GetAttribute.cs" />
+    <Compile Include="Attributes\PostAttribute.cs" />
+    <Compile Include="Attributes\PutAttribute.cs" />
+    <Compile Include="Attributes\ResourceActionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="RestfulController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
