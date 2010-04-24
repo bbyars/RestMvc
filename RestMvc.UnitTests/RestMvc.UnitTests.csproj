@@ -58,10 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assertions\CustomAssert.cs" />
-    <Compile Include="Assertions\LambdaConstraint.cs" />
-    <Compile Include="Assertions\Throws.cs" />
-    <Compile Include="Assertions\ThrowsTest.cs" />
     <Compile Include="Attributes\ResourceActionAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensionsTest.cs" />

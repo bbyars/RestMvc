@@ -33,7 +33,7 @@ namespace RestMvc
         public virtual void MethodNotSupported(string resourceUri)
         {
             SetAllowHeader(resourceUri);
-            throw new HttpException(405, "Method Not Supported");
+            Response.StatusCode = 405;
         }
 
         private void SetAllowHeader(string resourceUri)

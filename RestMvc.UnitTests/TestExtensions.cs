@@ -14,6 +14,7 @@ namespace RestMvc.UnitTests
             var headers = new NameValueCollection();
             var output = new StringWriter();
             var response = new Mock<HttpResponseBase>();
+            response.SetupAllProperties();
             response.Setup(r => r.Headers).Returns(headers);
             response.Setup(r => r.Output).Returns(output);
             response.Setup(r => r.Write(It.IsAny<string>())).Callback((string s) => output.Write(s));
