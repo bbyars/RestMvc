@@ -25,7 +25,6 @@ namespace RestMvc.UnitTests
             [Get("test/{id}")]
             public ActionResult Show(string id)
             {
-                Response.Headers["Cache-Control"] = "no-cache";
                 return new ContentResult {Content = "hello " + id};
             }
         }
@@ -75,6 +74,18 @@ namespace RestMvc.UnitTests
 
             Assert.That(controller.Response.Headers["Content-Length"], Is.EqualTo("hello".Length.ToString()));
             Assert.That(controller.Response.Output.ToString(), Is.EqualTo(""));
+        }
+
+        [Test, Ignore]
+        public void HeadShouldDelegateToGetMethodWithParameters()
+        {
+            var controller = new TestController().WithStubbedResponse();
+            controller.RouteData.Values["id"] = "world";
+
+            controller.Head("test/{id}");
+
+            Assert.That(controller.Response.Headers["Content-Length"],
+                Is.EqualTo("hello world".Length.ToString()));
         }
     }
 }

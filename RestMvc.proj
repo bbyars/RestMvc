@@ -2,10 +2,12 @@
   <PropertyGroup>
     <ProjectName>RestMvc</ProjectName>
     <CMDirectory>Dependencies\CM.NET</CMDirectory>
+    <WebProjectName>RestMvc.Example</WebProjectName>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageTargets>CopyPackageFiles</PackageTargets>
+    <PreFunctionalTestTargets>PrepareFunctionalTests</PreFunctionalTestTargets>
   </PropertyGroup>
 
   <Import Project="$(CMDirectory)\Default.targets" />
@@ -17,5 +19,14 @@
       <RestMvcFiles Include="RestMvc/bin/$(Configuration)/*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(RestMvcFiles)" DestinationFolder="$(PackageDirectory)" />
+  </Target>
+
+  <UsingTask TaskName="Microsoft.Sdc.Tasks.Web.WebSite.CreateVirtualDirectory" AssemblyFile="$(CMDirectory)\Microsoft.Sdc.Tasks.dll" />
+
+  <Target Name="PrepareFunctionalTests">
+    <WebSite.CreateVirtualDirectory
+      VirtualDirectoryName="RestMvc"
+      Path="$(MSBuildProjectDirectory)\RestMvc.Example"
+      AppCreate="True" />
   </Target>
 </Project>

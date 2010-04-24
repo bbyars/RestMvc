@@ -2,6 +2,10 @@
 *.suo
 RestMvc/bin/
 RestMvc/obj/
+RestMvc.Example/bin/
+RestMvc.Example/obj/
+RestMvc.FunctionalTests/bin/
+RestMvc.FunctionalTests/obj/
 RestMvc.UnitTests/bin/
 RestMvc.UnitTests/obj/
 build/

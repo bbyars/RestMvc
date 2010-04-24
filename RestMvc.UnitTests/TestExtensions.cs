@@ -2,6 +2,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Moq;
 
 namespace RestMvc.UnitTests
@@ -21,8 +22,11 @@ namespace RestMvc.UnitTests
 
             var context = new Mock<ControllerContext>();
             context.Setup(c => c.HttpContext.Response).Returns(response.Object);
-            controller.ControllerContext = context.Object;
 
+            var route = new RouteData();
+            context.Setup(c => c.RouteData).Returns(route);
+
+            controller.ControllerContext = context.Object;
             return controller;
         }
     }
