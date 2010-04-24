@@ -1,0 +1,21 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>RestMvc</ProjectName>
+    <CMDirectory>Dependencies\CM.NET</CMDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargets>CopyPackageFiles</PackageTargets>
+  </PropertyGroup>
+
+  <Import Project="$(CMDirectory)\Default.targets" />
+  <Import Project="$(CMDirectory)\DotNet.targets" />
+  <Import Project="$(CMDirectory)\Packagers\Zip.targets" />
+
+  <Target Name="CopyPackageFiles">
+    <ItemGroup>
+      <RestMvcFiles Include="RestMvc/bin/$(Configuration)/*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RestMvcFiles)" DestinationFolder="$(PackageDirectory)" />
+  </Target>
+</Project>

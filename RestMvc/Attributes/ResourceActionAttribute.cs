@@ -2,6 +2,9 @@ using System;
 
 namespace RestMvc.Attributes
 {
+    /// <summary>
+    /// Superclass for all routing attributes.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public abstract class ResourceActionAttribute : Attribute
     {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--
+This file is not meant to be included directly.  It serves as the "superclass" (by importing)
+of different packaging strategies.  Application-facing targets files should import this file
+and implement the CreatePackage target.
+-->
+  <PropertyGroup>
+    <BuildDirectory Condition="$(BuildDirectory) == ''">$(MSBuildProjectDirectory)\build</BuildDirectory>
+    <PackageDirectory Condition="$(PackageDirectory) == ''">$(BuildDirectory)\package</PackageDirectory>
+    <ProjectName Condition="$(ProjectName) == ''">$(MSBuildProjectName)</ProjectName>
+    <PackageName Condition="$(PackageName) == ''">$(ProjectName)-$(Version)</PackageName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CleanTargets>$(CleanTargets);ResetPackageDirectory</CleanTargets>
+    <PackageTargets>$(PackageTargets);CreatePackage</PackageTargets>
+  </PropertyGroup>
+
+  <Target Name="ResetPackageDirectory">
+    <RemoveDir Directories="$(PackageDirectory)" Condition="Exists('$(PackageDirectory)')" />
+    <MakeDir Directories="$(PackageDirectory)" />
+  </Target>
+
+  <Target Name="CreatePackage">
+    <Error Text="Package.targets is not intended to be imported directly - it should be imported in a different packaging targets file, and the CreatePackage target must be overwritten" />
+  </Target>
+</Project>

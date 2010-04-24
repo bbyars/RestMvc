@@ -7,6 +7,9 @@ namespace RestMvc
 {
     public static class ReflectionExtensions
     {
+        /// <summary>
+        /// Get all methods associated with a ResourceActionAttribute.
+        /// </summary>
         public static IEnumerable<MethodInfo> GetResourceActions(this Type type)
         {
             var methods = type.GetMethods();
@@ -17,6 +20,9 @@ namespace RestMvc
             }
         }
 
+        /// <summary>
+        /// Gets the first ResourceActionAttribute associated with the given method.
+        /// </summary>
         public static ResourceActionAttribute GetResourceActionAttribute(this MethodInfo method)
         {
             var attributes = method.GetCustomAttributes(typeof(ResourceActionAttribute), false);

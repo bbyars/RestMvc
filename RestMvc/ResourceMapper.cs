@@ -6,6 +6,15 @@ using System.Web.Routing;
 
 namespace RestMvc
 {
+    /// <summary>
+    /// Reflects on the attributes in TController to discover the routes
+    /// to be added.  Each TController can support multiple resource types.
+    /// This is quite common - typically an Index (list) and Show (entity)
+    /// are supported by the same controller, as are edit and create forms,
+    /// all of which have different resource types defined by different
+    /// URI templates.
+    /// </summary>
+    /// <typeparam name="TController">The type of controller to add routes for</typeparam>
     public class ResourceMapper<TController> where TController : RestfulController
     {
         public virtual string ControllerName
@@ -13,6 +22,9 @@ namespace RestMvc
             get { return typeof(TController).Name.Replace("Controller", ""); }
         }
 
+        /// <summary>
+        /// The distinct set of URI templates supported by TController
+        /// </summary>
         public virtual string[] ResourceUris
         {
             get
@@ -23,6 +35,9 @@ namespace RestMvc
             }
         }
 
+        /// <summary>
+        /// The set of HTTP methods supported at resourceUri
+        /// </summary>
         public virtual string[] SupportedMethods(string resourceUri)
         {
             return typeof(TController).GetResourceActions()
@@ -31,6 +46,9 @@ namespace RestMvc
                 .Select(attribute => attribute.HttpMethod).ToArray();
         }
 
+        /// <summary>
+        /// The set of HTTP methods _not_ supported at resourceUri
+        /// </summary>
         public virtual string[] UnsupportedMethods(string resourceUri)
         {
             var supportedMethods = SupportedMethods(resourceUri);
@@ -38,6 +56,9 @@ namespace RestMvc
                 .Where(method => !supportedMethods.Contains(method)).ToArray();
         }
 
+        /// <summary>
+        /// Maps all the routes provided by ResourceActionAttribute annotations.
+        /// </summary>
         public virtual void MapSupportedMethods(ICollection<RouteBase> routes)
         {
             foreach (var action in typeof(TController).GetResourceActions())
@@ -49,21 +70,37 @@ namespace RestMvc
             }
         }
 
+        /// <summary>
+        /// For every resource URI referenced in a ResourceActionAttribute,
+        /// maps the HTTP methods _not_ supported at that URI to a method
+        /// on the RestfulController that returns a 405 HTTP code.
+        /// This does not include the HEAD, OPTIONS, or WebDAV methods.
+        /// </summary>
         public virtual void MapUnsupportedMethods(RouteCollection routes)
         {
             foreach (var resourceUri in ResourceUris)
             {
                 foreach (var method in UnsupportedMethods(resourceUri))
                     Map(routes, resourceUri, Defaults(RestfulController.MethodNotSupported), method);
-
             }
         }
 
+        /// <summary>
+        /// For every resource URI referenced in a ResourceActionAttribute,
+        /// maps the HEAD method to a RestfulController action that knows
+        /// how to respond appropriately.
+        /// </summary>
         public virtual void MapHead(RouteCollection routes)
         {
             MapAllResources(routes, RestfulController.Head, "HEAD");
         }
 
+        /// <summary>
+        /// For every resource URI referenced in a ResourceActionAttribute,
+        /// maps the OPTIONS method to a RestfulController action that knows
+        /// how to respond appropriately.
+        /// </summary>
+        /// <param name="routes"></param>
         public virtual void MapOptions(RouteCollection routes)
         {
             MapAllResources(routes, RestfulController.Options, "OPTIONS");

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName Condition="$(ProjectName) == ''">$(MSBuildProjectName)</ProjectName>
+    <Solution Condition="$(Solution) == '' And Exists('$(ProjectName).sln')">$(ProjectName).sln</Solution>
+    <UnitTestProject Condition="$(UnitTestProject) == '' And Exists('$(ProjectName).UnitTests')">$(ProjectName).UnitTests</UnitTestProject>
+    <FunctionalTestProject Condition="$(FunctionalTestProject) == '' And Exists('$(ProjectName).FunctionalTests')">$(ProjectName).FunctionalTests</FunctionalTestProject>
+    <Configuration Condition="$(Configuration) == ''">Release</Configuration>
+    <Version Condition="$(Version) == ''">0.0.0.0</Version>
+    <NUnitDirectory Condition="$(NUnitDirectory) == '' And Exists('$(MSBuildProjectDirectory)\Dependencies\nunit')">$(MSBuildProjectDirectory)\Dependencies\nunit</NUnitDirectory>
+    <MSBuildCommunityTasksPath Condition="$(MSBuildCommunityTasksPath) == ''">$(MSBuildProjectDirectory)\Dependencies\CM.NET</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CleanTargets>$(CleanTargets);CleanVisualStudioDirectories</CleanTargets>
+    <PreCompileTargets>$(PreCompileTargets);WriteVersionToAssemblyInfos</PreCompileTargets>
+    <CompileTargets>$(CompileTargets);CompileSolution</CompileTargets>
+    <PostCompileTargets>$(PostCompileTargets);RestoreAssemblyInfos</PostCompileTargets>
+    <UnitTestTargets>$(UnitTestTargets);RunUnitTests</UnitTestTargets>
+    <FunctionalTestTargets>$(FunctionalTestTargets);RunFunctionalTests</FunctionalTestTargets>
+  </PropertyGroup>
+
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.NUnit" />
+
+  <ItemGroup>
+    <AssemblyInfoFiles Include="**\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <Target Name="CleanVisualStudioDirectories">
+    <ItemGroup>
+      <VisualStudioFiles Include="$(MSBuildProjectDirectory)\**\bin\$(Configuration)\**\*" />
+      <VisualStudioFiles Include="$(MSBuildProjectDirectory)\**\obj\$(Configuration)\**\*" />
+    </ItemGroup>
+    <Delete Files="@(VisualStudioFiles)" />
+  </Target>
+
+  <Target Name="CompileSolution" DependsOnTargets="CleanVisualStudioDirectories">
+    <Error Text="No Solution property was defined" Condition="$(Solution) == ''" />
+    <MSBuild Projects="$(Solution)" Targets="Rebuild" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <Target Name="WriteVersionToAssemblyInfos">
+    <Copy SourceFiles="@(AssemblyInfoFiles)"
+      DestinationFiles="%(AssemblyInfoFiles.FullPath).bak"
+      Condition="@(AssemblyInfoFiles) != ''" />
+    <FileUpdate Files="@(AssemblyInfoFiles)"
+      Regex="\[assembly: Assembly(File)?Version\(&quot;[\d\.\*]+&quot;\)\]"
+      ReplacementText="[assembly: Assembly$1Version(&quot;$(Version)&quot;)]" 
+      Condition="@(AssemblyInfoFiles) != ''" />
+  </Target>
+
+  <Target Name="RestoreAssemblyInfos" DependsOnTargets="WriteVersionToAssemblyInfos">
+    <Copy SourceFiles="%(AssemblyInfoFiles.FullPath).bak"
+      DestinationFiles="@(AssemblyInfoFiles)"
+      Condition="@(AssemblyInfoFiles) != '' and Exists('%(AssemblyInfoFiles.FullPath).bak')" />
+    <Delete Files="%(AssemblyInfoFiles.FullPath).bak" 
+      Condition="@(AssemblyInfoFiles) != '' and Exists('%(AssemblyInfoFiles.FullPath).bak')" />
+  </Target>
+
+  <Target Name="RunUnitTests" DependsOnTargets="CompileSolution">
+    <Error Text="Missing or invalid value specified for the NUnitDirectory property"
+      Condition="$(UnitTestProject) != '' And !Exists('$(NUnitDirectory)')" />
+    <NUnit Assemblies="$(MSBuildProjectDirectory)\$(UnitTestProject)\bin\$(Configuration)\$(UnitTestProject).dll"
+      ToolPath="$(NUnitDirectory)"
+      WorkingDirectory="$(MSBuildProjectDirectory)\$(UnitTestProject)\bin\$(Configuration)"
+      Condition="$(UnitTestProject) != ''" />
+  </Target>
+
+  <Target Name="RunFunctionalTests" DependsOnTargets="CompileSolution">
+    <Error Text="Missing or invalid value specified for the NUnitDirectory property"
+      Condition="$(FunctionalTestProject) != '' And !Exists('$(NUnitDirectory)')" />
+    <NUnit Assemblies="$(MSBuildProjectDirectory)\$(FunctionalTestProject)\bin\$(Configuration)\$(FunctionalTestProject).dll"
+      ToolPath="$(NUnitDirectory)"
+      WorkingDirectory="$(MSBuildProjectDirectory)\$(FunctionalTestProject)\bin\$(Configuration)"
+      Condition="$(FunctionalTestProject) != ''" />
+  </Target>
+</Project>

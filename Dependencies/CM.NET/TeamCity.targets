@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--
+Provides the properties that come if you use TeamCity as your continuous integration solution.
+Assumes that you're using TeamCity for versioning.
+IMPORTANT NOTE: 
+  TeamCity rudely changes the name of your project file, suffixing it with .teamcity.patch
+  (it does this to enhance the scripts, for example, to capture test runs).  This means that 
+  Unfortunately, this means that certain reserved MSBuild properties will not be what you want.
+  This poses a challenge for CM.NET, which tries to default as many properties as it can for you
+  using those properties.  To work-around the problem. without coupling this file too tightly to
+  all the other CM.NET files, CM.NET has defined a couple of parallel properties to the MSBuild
+  reserved properties - ProjectName, and ProjectFile.  If you use TeamCity, you must to
+  explictly define those before importing CM.NET files.  Sorry.
+  
+  If you can come up with a cleaner solution, that doesn't force the other scripts to change
+  just for TeamCity, please let me know...
+-->
+  <PropertyGroup>
+    <Version Condition="$(BUILD_NUMBER) != ''">$(BUILD_NUMBER)</Version>
+    <IsInContinuousIntegration Condition="$(BUILD_NUMBER) != ''">true</IsInContinuousIntegration>
+  </PropertyGroup>
+</Project>

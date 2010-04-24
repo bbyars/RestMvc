@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--
+When imported into your project, a self-extracting executable (sfx) of a GUI deployer
+will be created.  This will condense all of the files into a single .exe file, that,
+when  executed, will run the designated deployer application.
+
+Your deploy process works by calling the Deploy target of your project file.
+A Deploy target is added to the workflow for this purpose.  All deploy operations
+should source from the PackageDirectory.  This will work during the actual deploy
+run from the GUI, since it will pass the PackageDirectory on the command line.
+But also note that it works during your build process too, if you want.
+Running your functional tests against a local instance of the deployed application
+is a great way to test both your packaging and your deployment.
+-->
+  <PropertyGroup>
+    <!-- Ignore unless you're using TeamCity -->
+    <ProjectFile Condition="$(ProjectFile) == ''">$(MSBuildProjectFile)</ProjectFile>
+
+    <Environment Condition="$(Environment) == ''">dev</Environment>
+    <EnvironmentsDirectory Condition="$(EnvironmentsDirectory) == ''">$(MSBuildProjectDirectory)\environments</EnvironmentsDirectory>
+    <ConfigFileExtension Condition="$(ConfigFileExtension) == ''">properties</ConfigFileExtension>
+    <ConfigPath Condition="$(ConfigPath) == ''">$(EnvironmentsDirectory)\$(Environment).$(ConfigFileExtension)</ConfigPath>
+    <CMDirectory Condition="$(CMDirectory) == ''">$(MSBuildProjectDirectory)\Dependencies\CM.NET</CMDirectory>
+    <SdcTasksDirectory Condition="$(SdcTasksDirectory) == ''">$(CMDirectory)</SdcTasksDirectory>
+    <SfxExe>deployer.exe</SfxExe>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargets>$(PackageTargets);CopyEnvironmentFiles;ConfigureDeployer</PackageTargets>
+  </PropertyGroup>
+
+  <Import Project="Sfx.targets" />
+  <Import Project="$(ConfigPath)" Condition="Exists('$(ConfigPath)')" />
+
+  <UsingTask TaskName="ChangeDirectoryPrefix" AssemblyFile="$(CMDirectory)\CM.MSBuild.Tasks.dll" />
+  <UsingTask TaskName="StringReplace" AssemblyFile="$(SdcTasksDirectory)\Microsoft.Sdc.Tasks.dll" />
+  <UsingTask TaskName="Microsoft.Sdc.Tasks.XmlFile.SetValue" AssemblyFile="$(SdcTasksDirectory)\Microsoft.Sdc.Tasks.dll" />
+
+  <Target Name="CopyEnvironmentFiles">
+    <ItemGroup>
+      <EnvironmentFiles Include="$(EnvironmentsDirectory)\*" />
+    </ItemGroup>
+    <ChangeDirectoryPrefix Files="@(EnvironmenFiles)" FromPrefix="$(MSBuildProjectDirectory)" ToPrefix="$(PackageDirectory)">
+      <Output TaskParameter="TransformedFiles" ItemName="EnvironmentPackageFiles" />
+    </ChangeDirectoryPrefix>
+    <Copy SourceFiles="@(EnvironmentFiles)" DestinationFiles="@(EnvironmentPackageFiles)" />
+  </Target>
+
+  <Target Name="ConfigureDeployer">
+    <PropertyGroup>
+      <DeployerFilesConfigPath>$(PackageDirectory)\deployer.exe.config</DeployerFilesConfigPath>
+    </PropertyGroup>
+
+    <StringReplace Input="$(EnvironmentsDirectory)" OldValue="$(MSBuildProjectDirectory)\" NewValue="">
+      <Output TaskParameter="Output" PropertyName="RelativeEnvironmentsDirectory" />
+    </StringReplace>
+
+    <XmlFile.SetValue Path="$(DeployerFilesConfigPath)" XPath="//setting[@name='EnvironmentsDirectory']/value" Value="$(RelativeEnvironmentsDirectory)" />
+    <XmlFile.SetValue Path="$(DeployerFilesConfigPath)" XPath="//setting[@name='ConfigurationFileExtension']/value" Value="$(ConfigFileExtension)" />
+  </Target>
+</Project>
