@@ -8,7 +8,7 @@ using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace RestMvc.UnitTests
+namespace RestMvc.UnitTests.Assertions
 {
     public class Routes : Constraint
     {

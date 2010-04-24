@@ -45,6 +45,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -57,12 +58,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assertions\CustomAssert.cs" />
+    <Compile Include="Assertions\LambdaConstraint.cs" />
+    <Compile Include="Assertions\Throws.cs" />
+    <Compile Include="Assertions\ThrowsTest.cs" />
     <Compile Include="Attributes\ResourceActionAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensionsTest.cs" />
     <Compile Include="ResourceMapperTest.cs" />
     <Compile Include="RestfulControllerTest.cs" />
-    <Compile Include="Routes.cs" />
+    <Compile Include="Assertions\Routes.cs" />
+    <Compile Include="TestExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestMvc\RestMvc.csproj">

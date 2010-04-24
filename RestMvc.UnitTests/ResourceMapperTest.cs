@@ -3,6 +3,7 @@ using System.Web.Routing;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Attributes;
+using RestMvc.UnitTests.Assertions;
 
 namespace RestMvc.UnitTests
 {
@@ -21,62 +22,6 @@ namespace RestMvc.UnitTests
 
             [Get("Test/{id}")]
             public ActionResult Show() { return null; }
-        }
-
-        [Test]
-        public void ControllerNameShouldStripOutSuffix()
-        {
-            var mapper = new ResourceMapper<EmptyController>();
-            Assert.That(mapper.ControllerName, Is.EqualTo("Empty"));
-        }
-
-        [Test]
-        public void EmptyControllerShouldHaveNoResourceUris()
-        {
-            var mapper = new ResourceMapper<EmptyController>();
-            Assert.That(mapper.ResourceUris, Is.EqualTo(new string[0]));
-        }
-
-        [Test]
-        public void ShouldIgnoreCaseWhenSelectingResourceUris()
-        {
-            var mapper = new ResourceMapper<TestController>();
-            Assert.That(mapper.ResourceUris, Is.EqualTo(new[] {"Test", "Test/{id}"}));
-        }
-
-        [Test]
-        public void EmptyControllerShouldSupportNoMethods()
-        {
-            var mapper = new ResourceMapper<EmptyController>();
-            Assert.That(mapper.SupportedMethods(""), Is.EqualTo(new string[0]));
-        }
-
-        [Test]
-        public void AllMethodsShouldBeUnsupportedForEmptyController()
-        {
-            var mapper = new ResourceMapper<EmptyController>();
-            Assert.That(mapper.UnsupportedMethods(""), Is.EqualTo(new[] {"GET", "POST", "PUT", "DELETE"}));
-        }
-
-        [Test]
-        public void TestControllerShouldSupportGetAndPost()
-        {
-            var mapper = new ResourceMapper<TestController>();
-            Assert.That(mapper.SupportedMethods("Test"), Is.EqualTo(new[] {"GET", "POST"}));
-        }
-
-        [Test]
-        public void SupportedMethodsShouldBeCaseInsensitive()
-        {
-            var mapper = new ResourceMapper<TestController>();
-            Assert.That(mapper.SupportedMethods("test"), Is.EqualTo(new[] {"GET", "POST"}));
-        }
-
-        [Test]
-        public void SupportedMethodsForSecondResourceUriOnController()
-        {
-            var mapper = new ResourceMapper<TestController>();
-            Assert.That(mapper.SupportedMethods("test/{id}"), Is.EqualTo(new[] {"GET"}));
         }
 
         [Test]
@@ -121,7 +66,8 @@ namespace RestMvc.UnitTests
 
             mapper.MapUnsupportedMethods(routes);
 
-            var methodNotSupported = new {controller = "Test", action = RestfulController.MethodNotSupported};
+            var methodNotSupported = new {controller = "Test",
+                action = RestfulController.MethodNotSupportedAction, resourceUri = "test"};
             Assert.That("DELETE /test", Routes.To(methodNotSupported, routes));
             Assert.That("PUT /test", Routes.To(methodNotSupported, routes));
         }

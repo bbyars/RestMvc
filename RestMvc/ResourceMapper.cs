@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -17,45 +15,6 @@ namespace RestMvc
     /// <typeparam name="TController">The type of controller to add routes for</typeparam>
     public class ResourceMapper<TController> where TController : RestfulController
     {
-        public virtual string ControllerName
-        {
-            get { return typeof(TController).Name.Replace("Controller", ""); }
-        }
-
-        /// <summary>
-        /// The distinct set of URI templates supported by TController
-        /// </summary>
-        public virtual string[] ResourceUris
-        {
-            get
-            {
-                return typeof(TController).GetResourceActions()
-                    .Select(action => action.GetResourceActionAttribute().ResourceUri)
-                    .Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
-            }
-        }
-
-        /// <summary>
-        /// The set of HTTP methods supported at resourceUri
-        /// </summary>
-        public virtual string[] SupportedMethods(string resourceUri)
-        {
-            return typeof(TController).GetResourceActions()
-                .Select(action => action.GetResourceActionAttribute())
-                .Where(attribute => string.Equals(resourceUri, attribute.ResourceUri, StringComparison.InvariantCultureIgnoreCase))
-                .Select(attribute => attribute.HttpMethod).ToArray();
-        }
-
-        /// <summary>
-        /// The set of HTTP methods _not_ supported at resourceUri
-        /// </summary>
-        public virtual string[] UnsupportedMethods(string resourceUri)
-        {
-            var supportedMethods = SupportedMethods(resourceUri);
-            return new[] {"GET", "POST", "PUT", "DELETE"}
-                .Where(method => !supportedMethods.Contains(method)).ToArray();
-        }
-
         /// <summary>
         /// Maps all the routes provided by ResourceActionAttribute annotations.
         /// </summary>
@@ -78,10 +37,10 @@ namespace RestMvc
         /// </summary>
         public virtual void MapUnsupportedMethods(RouteCollection routes)
         {
-            foreach (var resourceUri in ResourceUris)
+            foreach (var resourceUri in typeof(TController).GetResourceUris())
             {
-                foreach (var method in UnsupportedMethods(resourceUri))
-                    Map(routes, resourceUri, Defaults(RestfulController.MethodNotSupported), method);
+                foreach (var method in typeof(TController).GetUnsupportedMethods(resourceUri))
+                    Map(routes, resourceUri, Defaults(RestfulController.MethodNotSupportedAction, resourceUri), method);
             }
         }
 
@@ -92,7 +51,7 @@ namespace RestMvc
         /// </summary>
         public virtual void MapHead(RouteCollection routes)
         {
-            MapAllResources(routes, RestfulController.Head, "HEAD");
+            MapAllResources(routes, RestfulController.HeadAction, "HEAD");
         }
 
         /// <summary>
@@ -103,30 +62,36 @@ namespace RestMvc
         /// <param name="routes"></param>
         public virtual void MapOptions(RouteCollection routes)
         {
-            MapAllResources(routes, RestfulController.Options, "OPTIONS");
+            MapAllResources(routes, RestfulController.OptionsAction, "OPTIONS");
         }
 
-        private void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
+        private static void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
         {
-            foreach (var resourceUri in ResourceUris)
-            {
-                var defaults = Defaults(actionName);
-                defaults.Add("resourceUri", resourceUri);
-                Map(routes, resourceUri, defaults, httpMethod);
-            }
+            foreach (var resourceUri in typeof(TController).GetResourceUris())
+                Map(routes, resourceUri, Defaults(actionName, resourceUri), httpMethod);
         }
 
-        private static void Map(ICollection<RouteBase> routes, string urlFormat, RouteValueDictionary defaults, string httpMethod)
+        private static void Map(ICollection<RouteBase> routes, string urlFormat,
+            RouteValueDictionary defaults, string httpMethod)
         {
-            routes.Add(new Route(urlFormat,
-                defaults,
+            routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
                 new MvcRouteHandler()));
         }
 
-        private RouteValueDictionary Defaults(string actionName)
+        private static RouteValueDictionary Defaults(string actionName)
         {
-            return new RouteValueDictionary {{"controller", ControllerName}, {"action", actionName}};
+            return new RouteValueDictionary
+            {
+                {"controller", typeof(TController).GetControllerName()}, {"action", actionName}
+            };
+        }
+
+        private static RouteValueDictionary Defaults(string actionName, string resourceUri)
+        {
+            var result = Defaults(actionName);
+            result.Add("resourceUri", resourceUri);
+            return result;
         }
     }
 }

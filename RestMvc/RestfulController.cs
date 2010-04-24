@@ -1,3 +1,4 @@
+using System.Web;
 using System.Web.Mvc;
 
 namespace RestMvc
@@ -7,8 +8,14 @@ namespace RestMvc
     /// </summary>
     public class RestfulController : Controller
     {
-        public const string MethodNotSupported = "MethodNotSupported";
-        public const string Head = "Head";
-        public const string Options = "Options";
+        public const string MethodNotSupportedAction = "MethodNotSupported";
+        public const string HeadAction = "Head";
+        public const string OptionsAction = "Options";
+
+        public virtual void MethodNotSupported(string resourceUri)
+        {
+            Response.Headers["Allow"] = string.Join(", ", GetType().GetSupportedMethods(resourceUri));
+            throw new HttpException(405, "Method Not Supported");
+        }
     }
 }
