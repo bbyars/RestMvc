@@ -96,5 +96,23 @@ namespace RestMvc.UnitTests
         {
             Assert.That(GetType().GetSupportedMethods("test/{id}"), Is.EqualTo(new[] {"GET"}));
         }
+
+        [Test]
+        public void GetActionShouldReturnNullForInvalidRequestUri()
+        {
+            Assert.That(GetType().GetAction("GET", ""), Is.Null);
+        }
+
+        [Test]
+        public void GetActionShouldReturnNullForInvalidHttpMethod()
+        {
+            Assert.That(GetType().GetAction("PUT", "test"), Is.Null);
+        }
+
+        [Test]
+        public void GetActionShouldReturnCorrectMethod()
+        {
+            Assert.That(GetType().GetAction("GET", "test").Name, Is.EqualTo("Index"));
+        }
     }
 }

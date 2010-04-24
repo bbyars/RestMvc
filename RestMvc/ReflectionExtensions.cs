@@ -70,5 +70,16 @@ namespace RestMvc
             return new[] { "GET", "POST", "PUT", "DELETE" }
                 .Where(method => !supportedMethods.Contains(method)).ToArray();
         }
+
+        /// <summary>
+        /// Returns the MethodInfo associated with the given HTTP method and resource URI,
+        /// as annotated by a ResourceActionAttribute, or null if no match is found.
+        /// </summary>
+        public static MethodInfo GetAction(this Type type, string httpMethod, string resourceUri)
+        {
+            var attribute = ResourceActionAttribute.Create(httpMethod, resourceUri);
+            return type.GetResourceActions()
+                .FirstOrDefault(action => attribute.Equals(action.GetResourceActionAttribute()));
+        }
     }
 }

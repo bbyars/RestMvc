@@ -8,6 +8,23 @@ namespace RestMvc.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public abstract class ResourceActionAttribute : Attribute
     {
+        public static ResourceActionAttribute Create(string httpMethod, string resourceUri)
+        {
+            switch(httpMethod.ToUpper())
+            {
+                case "GET":
+                    return new GetAttribute(resourceUri);
+                case "POST":
+                    return new PostAttribute(resourceUri);
+                case "PUT":
+                    return new PutAttribute(resourceUri);
+                case "DELETE":
+                    return new DeleteAttribute(resourceUri);
+                default:
+                    return null;
+            }
+        }
+
         protected ResourceActionAttribute(string resourceUri)
         {
             ResourceUri = resourceUri;

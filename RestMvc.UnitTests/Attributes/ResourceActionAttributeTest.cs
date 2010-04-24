@@ -54,5 +54,41 @@ namespace RestMvc.UnitTests.Attributes
         {
             Assert.That(new GetAttribute("resource"), Is.Not.EqualTo(new PutAttribute("resource")));
         }
+
+        [Test]
+        public void GetCreateShouldReturnGetAttribute()
+        {
+            Assert.That(ResourceActionAttribute.Create("GET", "test"), Is.EqualTo(new GetAttribute("test")));
+        }
+
+        [Test]
+        public void PostCreateShouldReturnPostAttribute()
+        {
+            Assert.That(ResourceActionAttribute.Create("POST", "test"), Is.EqualTo(new PostAttribute("test")));
+        }
+
+        [Test]
+        public void PutCreateShouldReturnPutAttribute()
+        {
+            Assert.That(ResourceActionAttribute.Create("PUT", "test"), Is.EqualTo(new PutAttribute("test")));
+        }
+
+        [Test]
+        public void DeleteCreateShouldReturnDeleteAttribute()
+        {
+            Assert.That(ResourceActionAttribute.Create("DELETE", "test"), Is.EqualTo(new DeleteAttribute("test")));
+        }
+
+        [Test]
+        public void CreateShouldReturnNullIfInvalidMethodGiven()
+        {
+            Assert.That(ResourceActionAttribute.Create("TRACE", "test"), Is.Null);
+        }
+
+        [Test]
+        public void CreateIsCaseInsensitive()
+        {
+            Assert.That(ResourceActionAttribute.Create("get", "test"), Is.EqualTo(new GetAttribute("test")));
+        }
     }
 }
