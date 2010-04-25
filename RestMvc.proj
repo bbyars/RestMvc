@@ -13,6 +13,7 @@
   <Import Project="$(CMDirectory)\Default.targets" />
   <Import Project="$(CMDirectory)\DotNet.targets" />
   <Import Project="$(CMDirectory)\Packagers\Zip.targets" />
+  <Import Project="NCover.targets" />
 
   <Target Name="CopyPackageFiles">
     <ItemGroup>

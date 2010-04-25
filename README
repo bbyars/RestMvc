@@ -68,13 +68,16 @@ the default format is used (html in this example).
 3. Building RestMVC
 
 Hopefully, build.bat should do the trick.  RestMVC uses CM.NET,
-a build library I've developed hosted at http://github.com/bbyars/CM.NET
+a build library I've developed hosted at http://github.com/bbyars/CM.NET.
+The output should be placed in the build directory.
 
 The build will install the RestMvc.Example project as a virtual directory
 under the Default Web Site and run some functional tests against it.
 I believe the functional tests will only work on IIS 7 - I think
 we would need to add a wildcard script map accepting all HTTP verbs
 on previous versions of IIS.
+
+build.bat /t:Coverage should spit out test coverage in the build directory.
 
 4. Contributing
 
