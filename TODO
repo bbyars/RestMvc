@@ -1,5 +1,6 @@
 * Handling HEAD does not work (2 ignored tests)
 * Handle tunneling PUT and DELETE through POST for HTML forms
+* Handle media type modifiers (e.g. text/html; q=0.8)
 ** Consider using another route handler decorator, and doing it like Rails (_method form data)
 * Route multiple routes to one action
 ** Test backward routing (creating URLs) with multiple routes
