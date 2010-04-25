@@ -6,16 +6,6 @@ namespace RestMvc.FunctionalTests
     {
         private readonly HttpWebRequest webRequest;
 
-        public static HttpRequest Get(string uri)
-        {
-            return new HttpRequest("GET", uri);
-        }
-
-        public static HttpRequest Post(string uri)
-        {
-            return new HttpRequest("POST", uri);
-        }
-
         public HttpRequest(string httpMethod, string uri)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(uri);

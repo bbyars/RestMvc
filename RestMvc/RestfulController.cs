@@ -1,4 +1,3 @@
-using System.Web;
 using System.Web.Mvc;
 
 namespace RestMvc
@@ -25,15 +24,17 @@ namespace RestMvc
             var result = (ActionResult)action.Invoke(this, new object[0]);
             result.ExecuteResult(ControllerContext);
 
-            var response = ControllerContext.HttpContext.Response;
-            response.Headers["Content-Length"] = response.Output.ToString().Length.ToString();
-            response.ClearContent();
+            Response.Headers["Content-Length"] = Response.Output.ToString().Length.ToString();
+            Response.SuppressContent = true;
+            Response.End();
         }
 
         public virtual void MethodNotSupported(string resourceUri)
         {
             SetAllowHeader(resourceUri);
             Response.StatusCode = 405;
+            Response.SuppressContent = true;
+            Response.End();
         }
 
         private void SetAllowHeader(string resourceUri)
