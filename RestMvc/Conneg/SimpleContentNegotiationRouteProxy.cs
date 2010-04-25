@@ -38,10 +38,8 @@ namespace RestMvc.Conneg
         public virtual void AddFormat(RouteData route, string[] acceptTypes)
         {
             // Bypass content negotiation by appending an extension to the route.
-            if (route.Values["format"] != null)
-                return;
-
-            route.Values["format"] = FormatFor(acceptTypes);
+            if (route.Values["format"] == null)
+                route.Values["format"] = FormatFor(acceptTypes);
         }
 
         private string FormatFor(IEnumerable<string> acceptTypes)

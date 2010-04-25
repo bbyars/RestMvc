@@ -45,5 +45,15 @@ namespace RestMvc.FunctionalTests
 
             Assert.That(response.ContentType, Text.StartsWith("application/xml"));
         }
+
+        [Test]
+        public void PassingFormatOnUrlShouldBypassContentNegotiation()
+        {
+            var request = new HttpRequest("GET", echoUri + ".xml").WithAcceptTypes("text/plain");
+            var response = request.GetResponse();
+
+            Assert.That(response.Body, Is.EqualTo("<echo>hello</echo>"));
+            Assert.That(response.ContentType, Text.StartsWith("application/xml"));
+        }
     }
 }
