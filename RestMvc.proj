@@ -17,6 +17,7 @@
   <Target Name="CopyPackageFiles">
     <ItemGroup>
       <RestMvcFiles Include="RestMvc/bin/$(Configuration)/*.dll" />
+      <RestMvcFiles Include="RestMvc/bin/$(Configuration)/RestMvc.xml" />
     </ItemGroup>
     <Copy SourceFiles="@(RestMvcFiles)" DestinationFolder="$(PackageDirectory)" />
   </Target>
