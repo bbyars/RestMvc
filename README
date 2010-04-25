@@ -39,7 +39,11 @@ it's in the URL, it can be bookmarked and emailed, with the same representation
 regardless of the HTTP headers.  Even if content negotiation is used, it allows
 you to bypass the standard negotiation process.
 
-Content negotiation is provided as a decorator to the standard RouteHandler:
+Content negotiation is provided as a decorator to the standard RouteHandler.
+One of the problems I've seen with some other RESTful routing libraries is that
+they define the IRouteHandler internally, which removes your ability to add
+any custom hooks into the routing process.  My hope is that providing the
+functionality as a decorator provides more flexibility.
 
 // In Global.asax.cs
 var map = new MediaTypeFormatMap();
@@ -47,10 +51,9 @@ map.Add("text/html", "html");
 map.Add("application/xml", xml");
 map.Add("text/xml", "xml");
 
-var baseHandler = new MvcRouteHandler();
-var connegDecorator = new ContentNegotiationRouteProxy(baseHandler, map);
+var connegRouter = new SimpleContentNegotiationRouteProxy(new MvcRouteHandler(), map);
 
-RouteTable.Routes.Map<OrdersController>();
+RouteTable.Routes.Map<OrdersController>(connegRouter);
 
 In the absence of a URL extension specifying the format, the connegDecorator
 will examine the Accept request header and pick the first entry in map
@@ -66,6 +69,12 @@ the default format is used (html in this example).
 
 Hopefully, build.bat should do the trick.  RestMVC uses CM.NET,
 a build library I've developed hosted at http://github.com/bbyars/CM.NET
+
+The build will install the RestMvc.Example project as a virtual directory
+under the Default Web Site and run some functional tests against it.
+I believe the functional tests will only work on IIS 7 - I think
+we would need to add a wildcard script map accepting all HTTP verbs
+on previous versions of IIS.
 
 4. Contributing
 

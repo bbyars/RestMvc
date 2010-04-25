@@ -18,7 +18,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldSupportAddedMediaType()
         {
             var map = new MediaTypeFormatMap();
-            map.Map("text/html", "html");
+            map.Add("text/html", "html");
             Assert.That(map.SupportsMediaType("text/html"), Is.True);
         }
 
@@ -26,7 +26,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldSupportWildCardedTextMediaType()
         {
             var map = new MediaTypeFormatMap();
-            map.Map("text/html", "html");
+            map.Add("text/html", "html");
             Assert.That(map.SupportsMediaType("text/*"), Is.True);
         }
 
@@ -34,7 +34,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldSupportWildCardedMediaType()
         {
             var map = new MediaTypeFormatMap();
-            map.Map("text/html", "html");
+            map.Add("text/html", "html");
             Assert.That(map.SupportsMediaType("*/*"), Is.True);
         }
 
@@ -49,7 +49,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldReturnFormatForExactMediaType()
         {
             var map = new MediaTypeFormatMap();
-            map.Map("text/html", "html");
+            map.Add("text/html", "html");
             Assert.That(map.FormatFor("text/html"), Is.EqualTo("html"));
         }
 
@@ -64,8 +64,8 @@ namespace RestMvc.UnitTests.Conneg
         public void DefaultFormatIsFirstEntry()
         {
             var map = new MediaTypeFormatMap();
-            map.Map("text/html", "html");
-            map.Map("text/xml", "xml");
+            map.Add("text/html", "html");
+            map.Add("text/xml", "xml");
 
             Assert.That(map.DefaultFormat, Is.EqualTo("html"));
         }

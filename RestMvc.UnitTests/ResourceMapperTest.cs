@@ -28,7 +28,7 @@ namespace RestMvc.UnitTests
         public void ControllerWithNoResourcesShouldNotMapsOptions()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<EmptyController>();
+            var mapper = new ResourceMapper<EmptyController>(new MvcRouteHandler());
 
             mapper.MapSupportedMethods(routes);
 
@@ -39,7 +39,7 @@ namespace RestMvc.UnitTests
         public void ShouldCreateRoutesForAnnotatedActions()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>();
+            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
 
             mapper.MapSupportedMethods(routes);
 
@@ -51,7 +51,7 @@ namespace RestMvc.UnitTests
         public void ShouldCreateRoutesToBypassContentNegotiation()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>();
+            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
 
             mapper.MapSupportedMethods(routes);
 
@@ -62,7 +62,7 @@ namespace RestMvc.UnitTests
         public void ShouldCreateMethodNotSupportedRoutesForUnmappedHttpMethods()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>();
+            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
 
             mapper.MapUnsupportedMethods(routes);
 
@@ -76,7 +76,7 @@ namespace RestMvc.UnitTests
         public void ShouldMapHeadForAllResources()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>();
+            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
 
             mapper.MapHead(routes);
 
@@ -88,7 +88,7 @@ namespace RestMvc.UnitTests
         public void ShouldMapOptionsForAllResources()
         {
             var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>();
+            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
 
             mapper.MapOptions(routes);
 

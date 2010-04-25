@@ -22,7 +22,7 @@ namespace RestMvc.Conneg
         /// <summary>
         /// Maps the provided media type to the given format.
         /// </summary>
-        public virtual void Map(string mediaType, string format)
+        public virtual void Add(string mediaType, string format)
         {
             map.Add(new KeyValuePair<MediaType, string>(new MediaType(mediaType), format));
         }

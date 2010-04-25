@@ -8,11 +8,9 @@ namespace RestMvc.Conneg
     /// <summary>
     /// Acts as a decorator to the standard RouteHandler, and adds simplistic content
     /// negotiation based on the prioritized associations that the application declares
-    /// in the MediaTypeFormatMap passed in.  This is simplistic for at least two reasons:
-    /// 1) It ignores the client prioritization
-    /// 2) It ignores the client quality (q) parameters
-    /// But it is likely appropriate for a number of services.  A more robust negotiation
-    /// scheme can be a separate decorator, allowing the developer to choose.
+    /// in the MediaTypeFormatMap passed in.  This is simplistic because it ignores
+    /// the client quality (q) parameters, but but it is likely appropriate for a number
+    /// of services.
     /// </summary>
     public class SimpleContentNegotiationRouteProxy : IRouteHandler
     {
@@ -46,9 +44,9 @@ namespace RestMvc.Conneg
             route.Values["format"] = FormatFor(acceptTypes);
         }
 
-        private string FormatFor(ICollection<string> acceptTypes)
+        private string FormatFor(IEnumerable<string> acceptTypes)
         {
-            if (acceptTypes == null || acceptTypes.Count == 0)
+            if (acceptTypes == null)
                 return map.DefaultFormat;
 
             var acceptType = acceptTypes.FirstOrDefault(accept => map.SupportsMediaType(accept));

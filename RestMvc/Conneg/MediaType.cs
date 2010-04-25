@@ -7,13 +7,13 @@ namespace RestMvc.Conneg
     /// </summary>
     public class MediaType
     {
-        public static readonly MediaType Atom = new MediaType("application/atom+xml");
-        public static readonly MediaType Json = new MediaType("application/json");
-        public static readonly MediaType Pdf = new MediaType("application/pdf");
-        public static readonly MediaType Xml = new MediaType("application/xml");
-        public static readonly MediaType Csv = new MediaType("text/csv");
-        public static readonly MediaType Html = new MediaType("text/html");
-        public static readonly MediaType PlainText = new MediaType("text/plain");
+        public static readonly string Atom = "application/atom+xml";
+        public static readonly string Json = "application/json";
+        public static readonly string Pdf = "application/pdf";
+        public static readonly string Xml = "application/xml";
+        public static readonly string Csv = "text/csv";
+        public static readonly string Html = "text/html";
+        public static readonly string PlainText = "text/plain";
 
         private readonly string[] parts;
 

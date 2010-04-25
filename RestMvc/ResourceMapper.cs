@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace RestMvc
@@ -15,6 +14,13 @@ namespace RestMvc
     /// <typeparam name="TController">The type of controller to add routes for</typeparam>
     public class ResourceMapper<TController> where TController : RestfulController
     {
+        private readonly IRouteHandler routeHandler;
+
+        public ResourceMapper(IRouteHandler routeHandler)
+        {
+            this.routeHandler = routeHandler;
+        }
+
         /// <summary>
         /// Maps all the routes provided by ResourceActionAttribute annotations.
         /// </summary>
@@ -65,18 +71,18 @@ namespace RestMvc
             MapAllResources(routes, RestfulController.OptionsAction, "OPTIONS");
         }
 
-        private static void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
+        private void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
         {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
                 Map(routes, resourceUri, Defaults(actionName, resourceUri), httpMethod);
         }
 
-        private static void Map(ICollection<RouteBase> routes, string urlFormat,
+        private void Map(ICollection<RouteBase> routes, string urlFormat,
             RouteValueDictionary defaults, string httpMethod)
         {
             routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
-                new MvcRouteHandler()));
+                routeHandler));
         }
 
         private static RouteValueDictionary Defaults(string actionName)

@@ -19,6 +19,11 @@ namespace RestMvc.FunctionalTests
             get { return (int)response.StatusCode; }
         }
 
+        public string ContentType
+        {
+            get { return response.ContentType; }
+        }
+
         public string Body
         {
             get

@@ -13,6 +13,12 @@ namespace RestMvc.FunctionalTests
             webRequest.ContentLength = 0;
         }
 
+        public HttpRequest WithAcceptTypes(params string[] acceptTypes)
+        {
+            webRequest.Accept = string.Join(", ", acceptTypes);
+            return this;
+        }
+
         public HttpResponse GetResponse()
         {
             try
