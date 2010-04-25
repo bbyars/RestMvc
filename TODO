@@ -1,4 +1,6 @@
 * Handling HEAD does not work (2 ignored tests)
+* Handle tunneling PUT and DELETE through POST for HTML forms
+** Consider using another route handler decorator, and doing it like Rails (_method form data)
 * Route multiple routes to one action
 ** Test backward routing (creating URLs) with multiple routes
 ** Don't automatically create the formatted URL.  Allow developer to create additional route for action
