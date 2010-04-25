@@ -59,9 +59,9 @@
     <Compile Include="Attributes\PostAttribute.cs" />
     <Compile Include="Attributes\PutAttribute.cs" />
     <Compile Include="Attributes\ResourceActionAttribute.cs" />
-    <Compile Include="Conneg\ContentNegotiationRouter.cs" />
     <Compile Include="Conneg\MediaType.cs" />
     <Compile Include="Conneg\MediaTypeFormatMap.cs" />
+    <Compile Include="Conneg\SimpleContentNegotiationRouteProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ResourceMapper.cs" />

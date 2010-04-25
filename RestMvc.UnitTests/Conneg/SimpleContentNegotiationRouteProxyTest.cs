@@ -6,14 +6,14 @@ using RestMvc.Conneg;
 namespace RestMvc.UnitTests.Conneg
 {
     [TestFixture]
-    public class ContentNegotiationRouterTest
+    public class SimpleContentNegotiationRouteProxyTest
     {
         [Test]
         public void ShouldMapMediaTypeToFormat()
         {
             var map = new MediaTypeFormatMap();
             map.Map("text/xml", "xml");
-            var router = new ContentNegotiationRouter(map);
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] { "*/*" });
@@ -26,7 +26,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Map("text/xml", "xml");
-            var router = new ContentNegotiationRouter(map);
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
             route.Values["format"] = "html";
 
@@ -40,7 +40,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Map("text/xml", "xml");
-            var router = new ContentNegotiationRouter(map);
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new string[0]);
@@ -54,7 +54,7 @@ namespace RestMvc.UnitTests.Conneg
             var map = new MediaTypeFormatMap();
             map.Map("text/xml", "xml");
             map.Map("text/html", "html");
-            var router = new ContentNegotiationRouter(map);
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] { "text/html", "text/xml" });
@@ -67,7 +67,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Map("text/xml", "xml");
-            var router = new ContentNegotiationRouter(map);
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] { "audio/*" });

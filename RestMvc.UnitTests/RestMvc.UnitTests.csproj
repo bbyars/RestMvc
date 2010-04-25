@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ResourceActionAttributeTest.cs" />
-    <Compile Include="Conneg\ContentNegotiationRouterTest.cs" />
+    <Compile Include="Conneg\SimpleContentNegotiationRouteProxyTest.cs" />
     <Compile Include="Conneg\MediaTypeFormatMapTest.cs" />
     <Compile Include="Conneg\MediaTypeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
