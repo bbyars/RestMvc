@@ -23,6 +23,10 @@ namespace RestMvc
 
         /// <summary>
         /// Maps all the routes provided by ResourceActionAttribute annotations.
+        /// For GET requests, also maps an additional "formatted" route.
+        /// e.g. [Get "test/{id}"] also maps test/{id}.{format}, which allows
+        /// the resource to serve up multiple representations without relying
+        /// on HTTP header content negotiation.
         /// </summary>
         public virtual void MapSupportedMethods(ICollection<RouteBase> routes)
         {
