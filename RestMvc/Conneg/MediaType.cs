@@ -11,6 +11,7 @@ namespace RestMvc.Conneg
         public static readonly string Json = "application/json";
         public static readonly string Pdf = "application/pdf";
         public static readonly string Xml = "application/xml";
+        public static readonly string XHtml = "application/xhtml+xml";
         public static readonly string Csv = "text/csv";
         public static readonly string Html = "text/html";
         public static readonly string PlainText = "text/plain";
