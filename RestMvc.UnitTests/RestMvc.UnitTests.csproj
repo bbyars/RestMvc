@@ -67,6 +67,7 @@
     <Compile Include="ResourceMapperTest.cs" />
     <Compile Include="RestfulControllerTest.cs" />
     <Compile Include="Assertions\Routes.cs" />
+    <Compile Include="RouteCollectionExtensionsTest.cs" />
     <Compile Include="TestExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

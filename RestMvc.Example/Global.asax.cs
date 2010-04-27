@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -14,7 +15,7 @@ namespace RestMvc.Example
             map.Add(MediaType.Xml, "xml");
             var connegHandler = new SimpleContentNegotiationRouteProxy(new MvcRouteHandler(), map);
 
-            RouteTable.Routes.Map<EchoController>(connegHandler);
+            RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly(), connegHandler);
         }
     }
 }
