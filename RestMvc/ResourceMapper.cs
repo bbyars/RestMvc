@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace RestMvc
@@ -12,7 +14,7 @@ namespace RestMvc
     /// URI templates.
     /// </summary>
     /// <typeparam name="TController">The type of controller to add routes for</typeparam>
-    public class ResourceMapper<TController> where TController : RestfulController
+    public class ResourceMapper<TController> where TController : ControllerBase
     {
         private readonly IRouteHandler routeHandler;
 
@@ -46,10 +48,13 @@ namespace RestMvc
         /// </summary>
         public virtual void MapUnsupportedMethods(RouteCollection routes)
         {
+            // We can handle this even without subclassing RestfulController
+            var controllerType = IsRestfulController ? typeof(TController) : typeof(RestfulController);
             foreach (var resourceUri in typeof(TController).GetResourceUris())
             {
+                var defaults = Defaults(controllerType, RestfulController.MethodNotSupportedAction, resourceUri);
                 foreach (var method in typeof(TController).GetUnsupportedMethods(resourceUri))
-                    Map(routes, resourceUri, Defaults(RestfulController.MethodNotSupportedAction, resourceUri), method);
+                    Map(routes, resourceUri, defaults, method);
             }
         }
 
@@ -57,9 +62,14 @@ namespace RestMvc
         /// For every resource URI referenced in a ResourceActionAttribute,
         /// maps the HEAD method to a RestfulController action that knows
         /// how to respond appropriately.
+        /// For controllers that don't subclass RestfulController, this
+        /// method will do nothing.
         /// </summary>
         public virtual void MapHead(RouteCollection routes)
         {
+            if (!IsRestfulController)
+                return;
+
             MapAllResources(routes, RestfulController.HeadAction, "HEAD");
         }
 
@@ -67,11 +77,21 @@ namespace RestMvc
         /// For every resource URI referenced in a ResourceActionAttribute,
         /// maps the OPTIONS method to a RestfulController action that knows
         /// how to respond appropriately.
+        /// For controllers that don't subclass RestfulController, this
+        /// method will do nothing.
         /// </summary>
         /// <param name="routes"></param>
         public virtual void MapOptions(RouteCollection routes)
         {
+            if (!IsRestfulController)
+                return;
+
             MapAllResources(routes, RestfulController.OptionsAction, "OPTIONS");
+        }
+
+        private static bool IsRestfulController
+        {
+            get { return typeof(TController).IsSubclassOf(typeof(RestfulController)); }
         }
 
         private void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
@@ -100,6 +120,13 @@ namespace RestMvc
         {
             var result = Defaults(actionName);
             result.Add("resourceUri", resourceUri);
+            return result;
+        }
+
+        private static RouteValueDictionary Defaults(Type controller, string actionName, string resourceUri)
+        {
+            var result = Defaults(actionName, resourceUri);
+            result["controller"] = controller.GetControllerName();
             return result;
         }
     }

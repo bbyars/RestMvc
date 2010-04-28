@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Web.Mvc;
 using System.Web.Routing;
 using NUnit.Framework;
 using RestMvc.Attributes;
@@ -21,6 +22,12 @@ namespace RestMvc.UnitTests
             public void Second() {}
         }
 
+        public class NonRestfulController : Controller
+        {
+            [Get("nonRestful")]
+            public void NonRestful() {}
+        }
+
         [Test]
         public void MapShouldAddAllResourcefulRoutes()
         {
@@ -34,7 +41,7 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
-        public void MapAllShouldMapAllControllersInAssembly()
+        public void MapAllShouldMapAllNonAbstractControllersInAssembly()
         {
             var routes = new RouteCollection();
             routes.MapAssembly(Assembly.GetExecutingAssembly());
@@ -48,6 +55,9 @@ namespace RestMvc.UnitTests
             Assert.That("POST /Second", Routes.To(new {controller = "Second", action = RestfulController.MethodNotSupportedAction}, routes));
             Assert.That("HEAD /Second", Routes.To(new {controller = "Second", action = RestfulController.HeadAction}, routes));
             Assert.That("OPTIONS /Second", Routes.To(new {controller = "Second", action = RestfulController.OptionsAction}, routes));
+
+            Assert.That("GET /NonRestful", Routes.To(new {controller = "NonRestful", action = "NonRestful"}, routes));
+            Assert.That("POST /NonRestful", Routes.To(new {controller = "Restful", action = RestfulController.MethodNotSupportedAction}, routes));
         }
     }
 }

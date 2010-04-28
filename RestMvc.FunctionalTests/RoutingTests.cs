@@ -7,6 +7,7 @@ namespace RestMvc.FunctionalTests
     public class RoutingTests
     {
         private const string echoUri = "http://localhost/RestMvc/echo/hello";
+        private const string nonRestfulUri = "http://localhost/RestMvc/nonRestful";
 
         [Test]
         public void ShouldRouteToEchoAction()
@@ -45,6 +46,20 @@ namespace RestMvc.FunctionalTests
 
             Assert.That(headResponse.Body, Is.EqualTo(""));
             Assert.That(headResponse.Headers["Content-Length"], Is.EqualTo(getResponse.Headers["Content-Length"]));
+        }
+
+        [Test]
+        public void RoutesToNonRestfulController()
+        {
+            var response = new HttpRequest("GET", nonRestfulUri).GetResponse();
+            Assert.That(response.StatusCode, Is.EqualTo(200));
+        }
+
+        [Test]
+        public void NonRestfulControllersSupport405StatusCode()
+        {
+            var response = new HttpRequest("POST", nonRestfulUri).GetResponse();
+            Assert.That(response.StatusCode, Is.EqualTo(405));
         }
     }
 }

@@ -30,6 +30,12 @@ namespace RestMvc.UnitTests
             public void Test() { }
         }
 
+        public class DifferentSuperclassController : Controller
+        {
+            [Get("test")]
+            public void Test() { }
+        }
+
         [Test]
         public void ControllerWithNoResourcesShouldNotMapsOptions()
         {
@@ -80,6 +86,19 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
+        public void ShouldCreateRestfulControllerForUnmappedHttpMethodsWithoutSubclassing()
+        {
+            var routes = new RouteCollection();
+            var mapper = new ResourceMapper<DifferentSuperclassController>(new MvcRouteHandler());
+
+            mapper.MapUnsupportedMethods(routes);
+
+            var methodNotSupported = new {controller = "Restful",
+                action = RestfulController.MethodNotSupportedAction, resourceUri = "test"};
+            Assert.That("DELETE /test", Routes.To(methodNotSupported, routes));
+        }
+
+        [Test]
         public void ShouldMapHeadForAllResources()
         {
             var routes = new RouteCollection();
@@ -92,6 +111,17 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
+        public void ShouldNotMapHeadWithoutSubclassing()
+        {
+            var routes = new RouteCollection();
+            var mapper = new ResourceMapper<DifferentSuperclassController>(new MvcRouteHandler());
+
+            mapper.MapHead(routes);
+
+            Assert.That(routes.Count, Is.EqualTo(0));
+        }
+
+        [Test]
         public void ShouldMapOptionsForAllResources()
         {
             var routes = new RouteCollection();
@@ -101,6 +131,17 @@ namespace RestMvc.UnitTests
 
             Assert.That("OPTIONS /test", Routes.To(new {controller = "Test", action = "Options", resourceUri = "Test"}, routes));
             Assert.That("OPTIONS /test/1", Routes.To(new {controller = "Test", action = "Options", resourceUri = "Test/{id}"}, routes));
+        }
+
+        [Test]
+        public void ShouldNotMapOptionsWithoutSubclassing()
+        {
+            var routes = new RouteCollection();
+            var mapper = new ResourceMapper<DifferentSuperclassController>(new MvcRouteHandler());
+
+            mapper.MapOptions(routes);
+
+            Assert.That(routes.Count, Is.EqualTo(0));
         }
     }
 }

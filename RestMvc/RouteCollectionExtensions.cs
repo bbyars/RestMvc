@@ -8,7 +8,7 @@ namespace RestMvc
     public static class RouteCollectionExtensions
     {
         /// <summary>
-        /// Maps all routes ton all RestfulController subclasses in the given assembly
+        /// Maps all routes on all non-abstract ControllerBase subclasses in the given assembly
         /// annotated with a ResourceActionAttribute.  For each distinct URI template,
         /// OPTIONS and HEAD will automatically be handled, and unsupported methods
         /// for the given URI will be routed to an action that returns a 405 status code.
@@ -19,7 +19,7 @@ namespace RestMvc
         }
 
         /// <summary>
-        /// Maps all routes ton all RestfulController subclasses in the given assembly
+        /// Maps all routes on all non-abstract ControllerBase subclasses in the given assembly
         /// annotated with a ResourceActionAttribute.  For each distinct URI template,
         /// OPTIONS and HEAD will automatically be handled, and unsupported methods
         /// for the given URI will be routed to an action that returns a 405 status code.
@@ -30,7 +30,7 @@ namespace RestMvc
             var method = typeof(RouteCollectionExtensions).GetMethods()
                 .First(m => m.Name == "Map" && m.GetParameters().Length == 2);
             var mapMethods = assembly.GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(RestfulController)))
+                .Where(type => type.IsSubclassOf(typeof(ControllerBase)) && !type.IsAbstract)
                 .Select(controllerType => method.MakeGenericMethod(controllerType));
 
             foreach (var mapMethod in mapMethods)
@@ -44,7 +44,7 @@ namespace RestMvc
         /// For each URI provided, unsupported methods will be routed to a RestfulController
         /// method that returns a 405 status code.
         /// </summary>
-        public static void Map<TController>(this RouteCollection routes) where TController : RestfulController
+        public static void Map<TController>(this RouteCollection routes) where TController : ControllerBase
         {
             routes.Map<TController>(new MvcRouteHandler());
         }
@@ -57,7 +57,7 @@ namespace RestMvc
         /// method that returns a 405 status code.  The provided routeHandler will be used.
         /// </summary>
         public static void Map<TController>(this RouteCollection routes, IRouteHandler routeHandler)
-            where TController : RestfulController
+            where TController : ControllerBase
         {
             var mapper = new ResourceMapper<TController>(routeHandler);
             mapper.MapSupportedMethods(routes);

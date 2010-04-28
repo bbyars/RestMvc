@@ -3,11 +3,5 @@
 * Handle tunneling PUT and DELETE through POST for HTML forms
 ** Consider using another route handler decorator, and doing it like Rails (_method form data)
 * Handle media type modifiers (e.g. text/html; q=0.8)
-* Route multiple routes to one action
 ** Test backward routing (creating URLs) with multiple routes
-* Don't add formatted routes automatically - allow the user to if he wants them
-** Hard to do if each route is a separate attribute - ordering is important, but
-   attribute order may not be maintained through reflection.  May have to use a single
-   attribute with a params set of uris
-* Don't force inheritance - allow using the attribute routing without RestfulController
-** All you give up is auto handling of HEAD, OPTIONS, 405 - and even these can be handled (without customization) by internally creating a controller
+* Map HEAD and OPTIONS even without subclassing (take the controller name as a parameter)

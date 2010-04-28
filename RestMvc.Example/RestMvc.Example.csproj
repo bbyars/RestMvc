@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="EchoController.cs" />
     <Compile Include="Global.asax.cs" />
+    <Compile Include="NonRestfulController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
