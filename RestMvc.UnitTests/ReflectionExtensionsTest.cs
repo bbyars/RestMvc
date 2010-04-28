@@ -21,6 +21,12 @@ namespace RestMvc.UnitTests
         [Get("test/{id}")]
         public void Show() { }
 
+        public class Multiple
+        {
+            [Get("first", "second")]
+            public void Test() { }
+        }
+
         [Test]
         public void ControllerNameShouldBeTypeNameIfNoSuffix()
         {
@@ -43,8 +49,8 @@ namespace RestMvc.UnitTests
         [Test]
         public void GetAttributeReturnsCorrectAttribute()
         {
-            var method = GetType().GetMethod("Show");
-            Assert.That(method.GetResourceActionAttribute(), Is.EqualTo(new GetAttribute("test/{id}")));
+            var method = GetType().GetMethod("Index");
+            Assert.That(method.GetResourceActionAttribute(), Is.EqualTo(new GetAttribute("test")));
         }
 
         [Test]
@@ -63,7 +69,13 @@ namespace RestMvc.UnitTests
         [Test]
         public void ShouldIgnoreCaseWhenSelectingResourceUris()
         {
-            Assert.That(GetType().GetResourceUris(), Is.EqualTo(new[] { "test", "test/{id}" }));
+            Assert.That(GetType().GetResourceUris(), Is.EqualTo(new[] {"test", "test/{id}"}));
+        }
+
+        [Test]
+        public void ShouldFindAllUrisInOneAttribute()
+        {
+            Assert.That(typeof(Multiple).GetResourceUris(), Is.EqualTo(new[] {"first", "second"}));
         }
 
         [Test]
@@ -98,6 +110,13 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
+        public void ShouldSupportMethodForAllUrisOnAttribute()
+        {
+            Assert.That(typeof(Multiple).GetSupportedMethods("first"), Is.EqualTo(new[] {"GET"}));
+            Assert.That(typeof(Multiple).GetSupportedMethods("second"), Is.EqualTo(new[] {"GET"}));
+        }
+
+        [Test]
         public void GetActionShouldReturnNullForInvalidRequestUri()
         {
             Assert.That(GetType().GetAction("GET", ""), Is.Null);
@@ -113,6 +132,12 @@ namespace RestMvc.UnitTests
         public void GetActionShouldReturnCorrectMethod()
         {
             Assert.That(GetType().GetAction("GET", "test").Name, Is.EqualTo("Index"));
+        }
+
+        [Test]
+        public void GetActionShouldSupportMultipleUris()
+        {
+            Assert.That(typeof(Multiple).GetAction("GET", "second").Name, Is.EqualTo("Test"));
         }
     }
 }

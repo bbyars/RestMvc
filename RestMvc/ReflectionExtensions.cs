@@ -46,7 +46,7 @@ namespace RestMvc
         public static string[] GetResourceUris(this Type type)
         {
             return type.GetResourceActions()
-                .Select(action => action.GetResourceActionAttribute().ResourceUri)
+                .SelectMany(action => action.GetResourceActionAttribute().ResourceUris)
                 .Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
         }
 
@@ -57,7 +57,7 @@ namespace RestMvc
         {
             return type.GetResourceActions()
                 .Select(action => action.GetResourceActionAttribute())
-                .Where(attribute => string.Equals(resourceUri, attribute.ResourceUri, StringComparison.InvariantCultureIgnoreCase))
+                .Where(attribute => attribute.SupportsUri(resourceUri))
                 .Select(attribute => attribute.HttpMethod).ToArray();
         }
 
@@ -79,7 +79,7 @@ namespace RestMvc
         {
             var attribute = ResourceActionAttribute.Create(httpMethod, resourceUri);
             return type.GetResourceActions()
-                .FirstOrDefault(action => attribute.Equals(action.GetResourceActionAttribute()));
+                .FirstOrDefault(action => attribute.Matches(action.GetResourceActionAttribute()));
         }
     }
 }

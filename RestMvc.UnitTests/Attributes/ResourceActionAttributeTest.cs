@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Attributes;
@@ -32,9 +33,73 @@ namespace RestMvc.UnitTests.Attributes
         }
 
         [Test]
+        public void ShouldNotSupportDifferentUri()
+        {
+            Assert.That(new GetAttribute("test").SupportsUri(""), Is.False);
+        }
+
+        [Test]
+        public void ShouldSupportSameUri()
+        {
+            Assert.That(new GetAttribute("test").SupportsUri("test"));
+        }
+
+        [Test]
+        public void ShouldSupportSameUriCaseInsensitive()
+        {
+            Assert.That(new GetAttribute("test").SupportsUri("TEST"));
+        }
+
+        [Test]
+        public void ShouldSupportSecondUri()
+        {
+            Assert.That(new GetAttribute("first", "second").SupportsUri("second"));
+        }
+
+        [Test]
+        public void ShouldNotMatchDifferentHttpMethod()
+        {
+            Assert.That(new GetAttribute("test").Matches(new PutAttribute("test")), Is.False);
+        }
+
+        [Test]
+        public void ShouldNotMatchIfDifferentUri()
+        {
+            Assert.That(new GetAttribute("first").Matches(new GetAttribute("second")), Is.False);
+        }
+
+        [Test]
+        public void ShouldMatchSameMethodAndUri()
+        {
+            Assert.That(new GetAttribute("test").Matches(new GetAttribute("test")));
+        }
+
+        [Test]
+        public void ShouldMatchSecondUri()
+        {
+            var attribute = new GetAttribute("first", "second");
+            Assert.That(attribute.Matches(new GetAttribute("second")));
+        }
+
+        [Test]
+        public void MatchesParametersSecondParameter()
+        {
+            var attribute = new GetAttribute("first");
+            Assert.That(attribute.Matches(new GetAttribute("first", "second")));
+        }
+
+        [Test]
         public void TestToString()
         {
             Assert.That(new GetAttribute("resource").ToString(), Is.EqualTo("GET resource"));
+        }
+
+        [Test]
+        public void TestToStringWithMultipleResourceUris()
+        {
+            var attribute = new GetAttribute("first", "second");
+            Assert.That(attribute.ToString(),
+                Is.EqualTo(string.Format("GET first{0}GET second", Environment.NewLine)));
         }
 
         [Test]
@@ -53,6 +118,13 @@ namespace RestMvc.UnitTests.Attributes
         public void NotEqualIfVerbDifferent()
         {
             Assert.That(new GetAttribute("resource"), Is.Not.EqualTo(new PutAttribute("resource")));
+        }
+
+        [Test]
+        public void NotEqualIfDifferentNumberOfUris()
+        {
+            var first = new GetAttribute("first", "second");
+            Assert.That(new GetAttribute("first"), Is.Not.EqualTo(first));
         }
 
         [Test]

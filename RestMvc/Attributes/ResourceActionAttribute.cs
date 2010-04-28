@@ -31,16 +31,26 @@ namespace RestMvc.Attributes
             ResourceUris = resourceUris.Select(uri => uri.TrimStart('~').TrimStart('/')).ToArray();
         }
 
-        public string[] ResourceUris { get; private set; }
+        public virtual string[] ResourceUris { get; private set; }
 
-        public string ResourceUri
+        public virtual string ResourceUri
         {
             get { return ResourceUris[0]; }
         }
 
-        public string HttpMethod
+        public virtual string HttpMethod
         {
             get { return GetType().Name.Replace("Attribute", "").ToUpper(); }
+        }
+
+        public virtual bool SupportsUri(string resourceUri)
+        {
+            return ResourceUris.Any(uri => string.Equals(uri, resourceUri, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public virtual bool Matches(ResourceActionAttribute other)
+        {
+            return ToString().Contains(other.ToString()) || other.ToString().Contains(ToString());
         }
 
         public override bool Equals(object obj)
@@ -56,7 +66,8 @@ namespace RestMvc.Attributes
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", HttpMethod, ResourceUri);
+            var lines = ResourceUris.Select(uri => string.Format("{0} {1}", HttpMethod, uri));
+            return string.Join(Environment.NewLine, lines.ToArray());
         }
     }
 }
