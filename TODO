@@ -9,6 +9,5 @@
 ** Hard to do if each route is a separate attribute - ordering is important, but
    attribute order may not be maintained through reflection.  May have to use a single
    attribute with a params set of uris
-* Add convenient way to map all RestfulControllers in assembly
 * Don't force inheritance - allow using the attribute routing without RestfulController
 ** All you give up is auto handling of HEAD, OPTIONS, 405 - and even these can be handled (without customization) by internally creating a controller

@@ -1,11 +1,11 @@
 namespace RestMvc.Attributes
 {
     /// <summary>
-    /// Route the PUT method to the provided URI.
+    /// Route the PUT method to the provided URIs.
     /// </summary>
     public class PutAttribute : ResourceActionAttribute
     {
-        public PutAttribute(string resourceUri) : base(resourceUri)
+        public PutAttribute(params string[] resourceUris) : base(resourceUris)
         {
         }
     }

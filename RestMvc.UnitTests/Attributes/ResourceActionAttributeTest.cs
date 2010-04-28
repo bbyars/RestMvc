@@ -90,5 +90,17 @@ namespace RestMvc.UnitTests.Attributes
         {
             Assert.That(ResourceActionAttribute.Create("get", "test"), Is.EqualTo(new GetAttribute("test")));
         }
+
+        [Test]
+        public void AllowsEnteringRootedUriTemplate()
+        {
+            Assert.That(new GetAttribute("/test").ResourceUri, Is.EqualTo("test"));
+        }
+
+        [Test]
+        public void AllowsEnteringVirtualRootedUriTemplate()
+        {
+            Assert.That(new GetAttribute("~/test").ResourceUri, Is.EqualTo("test"));
+        }
     }
 }

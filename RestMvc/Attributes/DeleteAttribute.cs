@@ -1,11 +1,11 @@
 namespace RestMvc.Attributes
 {
     /// <summary>
-    /// Route the DELETE method to the provided URI
+    /// Route the DELETE method to the provided URIs.
     /// </summary>
     public class DeleteAttribute : ResourceActionAttribute
     {
-        public DeleteAttribute(string resourceUri) : base(resourceUri)
+        public DeleteAttribute(params string[] resourceUris) : base(resourceUris)
         {
         }
     }

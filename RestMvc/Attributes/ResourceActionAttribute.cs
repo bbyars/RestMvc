@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace RestMvc.Attributes
 {
@@ -25,12 +26,17 @@ namespace RestMvc.Attributes
             }
         }
 
-        protected ResourceActionAttribute(string resourceUri)
+        protected ResourceActionAttribute(params string[] resourceUris)
         {
-            ResourceUri = resourceUri;
+            ResourceUris = resourceUris.Select(uri => uri.TrimStart('~').TrimStart('/')).ToArray();
         }
 
-        public string ResourceUri { get; private set; }
+        public string[] ResourceUris { get; private set; }
+
+        public string ResourceUri
+        {
+            get { return ResourceUris[0]; }
+        }
 
         public string HttpMethod
         {

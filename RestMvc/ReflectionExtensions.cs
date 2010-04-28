@@ -72,7 +72,7 @@ namespace RestMvc
         }
 
         /// <summary>
-        /// Returns the MethodInfo associated with the given HTTP method and resource URI,
+        /// The MethodInfo associated with the given HTTP method and resource URI,
         /// as annotated by a ResourceActionAttribute, or null if no match is found.
         /// </summary>
         public static MethodInfo GetAction(this Type type, string httpMethod, string resourceUri)
