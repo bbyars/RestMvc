@@ -10,13 +10,13 @@ It was largely inspired by the Ruby framework Sinatra (http://www.sinatrarb.com/
 
 public class OrdersController : RestfulController
 {
-    [Get("orders")]
+    [Get("/orders")]
     public ActionResult Index() { ... }
 
-    [Post("orders"]
+    [Post("/orders"]
     public ActionResult Create() { ... }
 
-    [Get("orders/{id}")]
+    [Get("/orders/{id}.format", "/orders/{id}")]
     public ActionResult Show(string id, string format) { ... }
 }
 
@@ -27,7 +27,7 @@ The code above will do the following:
 * Create the three routes defined by the HTTP methods and URI templates in the attributes
 * Route HEAD and OPTIONS methods for the two URI templates ("orders" and "orders/{id}")
   to a superclass method capable of handling those methods intelligently.
-* Route the remaining (non-WebDAV) methods for both URI templates to a superclass method
+* Route the remaining (non-WebDAV) methods for both URI templates to a method
   that knows to return a 405 HTTP status code (Method Not Supported).
 * Notice the optional format parameter on the GET method actions (Show uses it;
   Index does not).  Routes with an extension are routed such that the extension
@@ -37,7 +37,9 @@ The code above will do the following:
 The last point is a convenient way to handle multiple formats for a resource.  Since
 it's in the URL, it can be bookmarked and emailed, with the same representation
 regardless of the HTTP headers.  Even if content negotiation is used, it allows
-you to bypass the standard negotiation process.
+you to bypass the standard negotiation process.  RestMvc does not automatically
+provide these routes for you - notice that two URIs are specified on the Show method,
+and the order is important, since /orders/123.xml would also match /orders/{id} (id = 123.xml).
 
 Content negotiation is provided as a decorator to the standard RouteHandler.
 One of the problems I've seen with some other RESTful routing libraries is that
@@ -55,13 +57,12 @@ var connegRouter = new SimpleContentNegotiationRouteProxy(new MvcRouteHandler(),
 
 RouteTable.Routes.Map<OrdersController>(connegRouter);
 
-In the absence of a URL extension specifying the format, the connegDecorator
-will examine the Accept request header and pick the first entry in map
-that matches _any_ media type in the Accept header (a fairly primitive
-negotiation).  If no Accept header is sent, or it is any of text/html,
-text/*, or */*, then the html format will be added to the route data,
-and can be added to the controller action as a parameter (GET methods
-only).  If none of those accept types are sent, it tries to match
+In the absence of a route URI template specifying the format explicitly,
+the connegDecorator will examine the Accept request header and pick the
+first media type supported in the map.  If no Accept header is sent,
+or it is any of text/html, text/*, or */*, then the html format will be
+added to the route data, and can be added to the controller action as a
+parameter.  If none of those accept types are sent, it tries to match
 the next entry in map (application/xml).  If no matches are found,
 the default format is used (html in this example).
 
