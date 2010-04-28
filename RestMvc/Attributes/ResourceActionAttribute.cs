@@ -9,6 +9,9 @@ namespace RestMvc.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public abstract class ResourceActionAttribute : Attribute
     {
+        /// <summary>
+        /// A factory method for dynamically creating the appropriate subclass
+        /// </summary>
         public static ResourceActionAttribute Create(string httpMethod, string resourceUri)
         {
             switch(httpMethod.ToUpper())
@@ -31,38 +34,35 @@ namespace RestMvc.Attributes
             ResourceUris = resourceUris.Select(uri => uri.TrimStart('~').TrimStart('/')).ToArray();
         }
 
+        /// <summary>
+        /// The set of URI templates that map to the method annotated with this attribute
+        /// </summary>
         public virtual string[] ResourceUris { get; private set; }
 
-        public virtual string ResourceUri
-        {
-            get { return ResourceUris[0]; }
-        }
-
+        /// <summary>
+        /// The HTTP method required to route to the method annotated with this attribute
+        /// </summary>
         public virtual string HttpMethod
         {
             get { return GetType().Name.Replace("Attribute", "").ToUpper(); }
         }
 
+        /// <summary>
+        /// Returns true if this attribute's ResourceUris contains the provided uri; false otherwise
+        /// </summary>
         public virtual bool SupportsUri(string resourceUri)
         {
             return ResourceUris.Any(uri => string.Equals(uri, resourceUri, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        /// <summary>
+        /// Returns true if the HttpMethod of other matches this HttpMethod, and if this attribute's
+        /// ResourceUris is a superset of other's ResourceUris
+        /// </summary>
         public virtual bool Contains(ResourceActionAttribute other)
         {
-            return HttpMethod.Equals(other.HttpMethod)
-                && ResourceUris.Intersect(other.ResourceUris, StringComparer.InvariantCultureIgnoreCase).Count() > 0;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var other = obj as ResourceActionAttribute;
-            return other != null && Equals(ToString(), other.ToString());
-        }
-
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
+            var commonUris = ResourceUris.Intersect(other.ResourceUris, StringComparer.InvariantCultureIgnoreCase).Count();
+            return HttpMethod.Equals(other.HttpMethod) && commonUris == other.ResourceUris.Length;
         }
 
         public override string ToString()

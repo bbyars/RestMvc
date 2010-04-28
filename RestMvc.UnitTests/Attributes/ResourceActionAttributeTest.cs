@@ -88,6 +88,13 @@ namespace RestMvc.UnitTests.Attributes
         }
 
         [Test]
+        public void ContainerMustBeASupersetOfContained()
+        {
+            var attribute = new GetAttribute("first", "second");
+            Assert.That(attribute.Contains(new GetAttribute("second", "third")), Is.False);
+        }
+
+        [Test]
         public void TestToString()
         {
             Assert.That(new GetAttribute("resource").ToString(), Is.EqualTo("GET resource"));
@@ -99,31 +106,6 @@ namespace RestMvc.UnitTests.Attributes
             var attribute = new GetAttribute("first", "second");
             Assert.That(attribute.ToString(),
                 Is.EqualTo(string.Format("GET first{0}GET second", Environment.NewLine)));
-        }
-
-        [Test]
-        public void EqualIfMethodAndResourceEqual()
-        {
-            Assert.That(new GetAttribute("resource"), Is.EqualTo(new GetAttribute("resource")));
-        }
-
-        [Test]
-        public void NotEqualIfResourceDifferent()
-        {
-            Assert.That(new GetAttribute("1"), Is.Not.EqualTo(new GetAttribute("2")));
-        }
-
-        [Test]
-        public void NotEqualIfVerbDifferent()
-        {
-            Assert.That(new GetAttribute("resource"), Is.Not.EqualTo(new PutAttribute("resource")));
-        }
-
-        [Test]
-        public void NotEqualIfDifferentNumberOfUris()
-        {
-            var first = new GetAttribute("first", "second");
-            Assert.That(new GetAttribute("first"), Is.Not.EqualTo(first));
         }
 
         [Test]
@@ -165,13 +147,13 @@ namespace RestMvc.UnitTests.Attributes
         [Test]
         public void AllowsEnteringRootedUriTemplate()
         {
-            Assert.That(new GetAttribute("/test").ResourceUri, Is.EqualTo("test"));
+            Assert.That(new GetAttribute("/test").ResourceUris[0], Is.EqualTo("test"));
         }
 
         [Test]
         public void AllowsEnteringVirtualRootedUriTemplate()
         {
-            Assert.That(new GetAttribute("~/test").ResourceUri, Is.EqualTo("test"));
+            Assert.That(new GetAttribute("~/test").ResourceUris[0], Is.EqualTo("test"));
         }
     }
 }

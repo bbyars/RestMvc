@@ -33,8 +33,6 @@ namespace RestMvc
             foreach (var action in typeof(TController).GetResourceActions())
             {
                 var attribute = action.GetResourceActionAttribute();
-                if (attribute.HttpMethod == "GET")
-                    Map(routes, attribute.ResourceUri + ".{format}", Defaults(action.Name), attribute.HttpMethod);
                 foreach (var uri in attribute.ResourceUris)
                     Map(routes, uri, Defaults(action.Name), attribute.HttpMethod);
             }

@@ -54,17 +54,6 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
-        public void ShouldCreateRoutesToBypassContentNegotiation()
-        {
-            var routes = new RouteCollection();
-            var mapper = new ResourceMapper<TestController>(new MvcRouteHandler());
-
-            mapper.MapSupportedMethods(routes);
-
-            Assert.That("GET /Test.xml", Routes.To(new {controller = "Test", action = "List", format = "xml"}, routes));
-        }
-
-        [Test]
         public void ShouldRouteAllUrisInAttribute()
         {
             var routes = new RouteCollection();

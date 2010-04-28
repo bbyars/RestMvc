@@ -6,7 +6,7 @@ namespace RestMvc.Example
 {
     public class EchoController : RestfulController
     {
-        [Get("echo/{thingToEcho}")]
+        [Get("echo/{thingToEcho}.{format}", "echo/{thingToEcho}")]
         public ActionResult Echo(string thingToEcho, string format)
         {
             if (format == "xml")
