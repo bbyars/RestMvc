@@ -48,9 +48,10 @@ namespace RestMvc.Attributes
             return ResourceUris.Any(uri => string.Equals(uri, resourceUri, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public virtual bool Matches(ResourceActionAttribute other)
+        public virtual bool Contains(ResourceActionAttribute other)
         {
-            return ToString().Contains(other.ToString()) || other.ToString().Contains(ToString());
+            return HttpMethod.Equals(other.HttpMethod)
+                && ResourceUris.Intersect(other.ResourceUris, StringComparer.InvariantCultureIgnoreCase).Count() > 0;
         }
 
         public override bool Equals(object obj)

@@ -35,7 +35,8 @@ namespace RestMvc
                 var attribute = action.GetResourceActionAttribute();
                 if (attribute.HttpMethod == "GET")
                     Map(routes, attribute.ResourceUri + ".{format}", Defaults(action.Name), attribute.HttpMethod);
-                Map(routes, attribute.ResourceUri, Defaults(action.Name), attribute.HttpMethod);
+                foreach (var uri in attribute.ResourceUris)
+                    Map(routes, uri, Defaults(action.Name), attribute.HttpMethod);
             }
         }
 

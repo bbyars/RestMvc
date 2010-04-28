@@ -57,35 +57,34 @@ namespace RestMvc.UnitTests.Attributes
         }
 
         [Test]
-        public void ShouldNotMatchDifferentHttpMethod()
+        public void ShouldNotContainDifferentHttpMethod()
         {
-            Assert.That(new GetAttribute("test").Matches(new PutAttribute("test")), Is.False);
+            Assert.That(new GetAttribute("test").Contains(new PutAttribute("test")), Is.False);
         }
 
         [Test]
-        public void ShouldNotMatchIfDifferentUri()
+        public void ShouldNotContainIfDifferentUri()
         {
-            Assert.That(new GetAttribute("first").Matches(new GetAttribute("second")), Is.False);
+            Assert.That(new GetAttribute("first").Contains(new GetAttribute("second")), Is.False);
         }
 
         [Test]
-        public void ShouldMatchSameMethodAndUri()
+        public void ShouldContainSameMethodAndUri()
         {
-            Assert.That(new GetAttribute("test").Matches(new GetAttribute("test")));
+            Assert.That(new GetAttribute("test").Contains(new GetAttribute("test")));
         }
 
         [Test]
-        public void ShouldMatchSecondUri()
+        public void ShouldContainSecondUri()
         {
             var attribute = new GetAttribute("first", "second");
-            Assert.That(attribute.Matches(new GetAttribute("second")));
+            Assert.That(attribute.Contains(new GetAttribute("second")));
         }
 
         [Test]
-        public void MatchesParametersSecondParameter()
+        public void ShouldNotContainEmptyString()
         {
-            var attribute = new GetAttribute("first");
-            Assert.That(attribute.Matches(new GetAttribute("first", "second")));
+            Assert.That(new GetAttribute("test").Contains(new GetAttribute("")), Is.False);
         }
 
         [Test]

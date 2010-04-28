@@ -15,13 +15,19 @@ namespace RestMvc.UnitTests
         public class TestController : RestfulController
         {
             [Get("Test")]
-            public ActionResult List() { return null; }
+            public void List() { }
 
             [Post("test")]
-            public ActionResult Create() { return null; }
+            public void Create() { }
 
             [Get("Test/{id}")]
-            public ActionResult Show() { return null; }
+            public void Show() { }
+        }
+
+        public class MultipleController : RestfulController
+        {
+            [Get("test1", "test2")]
+            public void Test() { }
         }
 
         [Test]
@@ -56,6 +62,18 @@ namespace RestMvc.UnitTests
             mapper.MapSupportedMethods(routes);
 
             Assert.That("GET /Test.xml", Routes.To(new {controller = "Test", action = "List", format = "xml"}, routes));
+        }
+
+        [Test]
+        public void ShouldRouteAllUrisInAttribute()
+        {
+            var routes = new RouteCollection();
+            var mapper = new ResourceMapper<MultipleController>(new MvcRouteHandler());
+
+            mapper.MapSupportedMethods(routes);
+
+            Assert.That("GET /test1", Routes.To(new {controller = "Multiple", action = "Test"}, routes));
+            Assert.That("GET /test2", Routes.To(new {controller = "Multiple", action = "Test"}, routes));
         }
 
         [Test]

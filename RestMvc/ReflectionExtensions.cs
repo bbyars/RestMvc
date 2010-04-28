@@ -79,7 +79,7 @@ namespace RestMvc
         {
             var attribute = ResourceActionAttribute.Create(httpMethod, resourceUri);
             return type.GetResourceActions()
-                .FirstOrDefault(action => attribute.Matches(action.GetResourceActionAttribute()));
+                .FirstOrDefault(action => action.GetResourceActionAttribute().Contains(attribute));
         }
     }
 }
