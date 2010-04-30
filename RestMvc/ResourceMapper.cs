@@ -50,11 +50,14 @@ namespace RestMvc
         /// </summary>
         public virtual void MapUnsupportedMethods()
         {
-            // We can handle this even without subclassing RestfulController
-            var controllerType = IsRestfulController ? typeof(TController) : typeof(RestfulController);
             foreach (var resourceUri in typeof(TController).GetResourceUris())
             {
-                var defaults = Defaults(controllerType, RestfulController.MethodNotSupportedAction, resourceUri);
+                var defaults = Defaults(RestfulController.MethodNotSupportedAction, resourceUri);
+                if (!IsRestfulController)
+                {
+                    defaults["controller"] = typeof(RestfulController).GetControllerName();
+                    defaults["controllerType"] = typeof(TController);
+                }
                 foreach (var method in typeof(TController).GetUnsupportedMethods(resourceUri))
                     Map(routes, resourceUri, defaults, method);
             }

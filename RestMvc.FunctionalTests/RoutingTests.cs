@@ -38,7 +38,7 @@ namespace RestMvc.FunctionalTests
             Assert.That(response.Body, Is.EqualTo(""));
         }
 
-        [Test, Ignore("Content-length being set by IIS?")]
+        [Test, Ignore]
         public void HeadShouldSendBackSameHeadersAsGetWithEmptyBody()
         {
             var getResponse = new HttpRequest("GET", echoUri).GetResponse();
@@ -60,6 +60,8 @@ namespace RestMvc.FunctionalTests
         {
             var response = new HttpRequest("POST", nonRestfulUri).GetResponse();
             Assert.That(response.StatusCode, Is.EqualTo(405));
+            Assert.That(response.Headers["Allow"], Is.EqualTo("GET"));
+            Assert.That(response.Body, Is.EqualTo(""));
         }
 
         [Test]

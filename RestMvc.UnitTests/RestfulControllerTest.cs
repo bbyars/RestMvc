@@ -54,6 +54,17 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
+        public void MethodNotSupportedShouldSetAllowHeaderWithoutSubclassing()
+        {
+            var controller = new TestController().WithStubbedContext()
+                .WithRouteValue("controllerType", typeof(DifferentSubclassController));
+
+            controller.MethodNotSupported("test");
+
+            Assert.That(controller.Response.Headers["Allow"], Is.EqualTo("GET"));
+        }
+
+        [Test]
         public void OptionsShouldSetAllowHeader()
         {
             var controller = new TestController().WithStubbedContext();

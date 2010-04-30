@@ -93,8 +93,8 @@ namespace RestMvc.UnitTests
 
             mapper.MapUnsupportedMethods();
 
-            var methodNotSupported = new {controller = "Restful",
-                action = RestfulController.MethodNotSupportedAction, resourceUri = "test"};
+            var methodNotSupported = new {controller = "Restful", action = RestfulController.MethodNotSupportedAction,
+                resourceUri = "test", controllerType = typeof(DifferentSuperclassController)};
             Assert.That("DELETE /test", Routes.To(methodNotSupported, routes));
         }
 
