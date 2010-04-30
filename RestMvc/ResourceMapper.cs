@@ -16,10 +16,12 @@ namespace RestMvc
     /// <typeparam name="TController">The type of controller to add routes for</typeparam>
     public class ResourceMapper<TController> where TController : ControllerBase
     {
+        private readonly RouteCollection routes;
         private readonly IRouteHandler routeHandler;
 
-        public ResourceMapper(IRouteHandler routeHandler)
+        public ResourceMapper(RouteCollection routes, IRouteHandler routeHandler)
         {
+            this.routes = routes;
             this.routeHandler = routeHandler;
         }
 
@@ -30,7 +32,7 @@ namespace RestMvc
         /// the resource to serve up multiple representations without relying
         /// on HTTP header content negotiation.
         /// </summary>
-        public virtual void MapSupportedMethods(ICollection<RouteBase> routes)
+        public virtual void MapSupportedMethods()
         {
             foreach (var action in typeof(TController).GetResourceActions())
             {
@@ -46,7 +48,7 @@ namespace RestMvc
         /// on the RestfulController that returns a 405 HTTP code.
         /// This does not include the HEAD, OPTIONS, or WebDAV methods.
         /// </summary>
-        public virtual void MapUnsupportedMethods(RouteCollection routes)
+        public virtual void MapUnsupportedMethods()
         {
             // We can handle this even without subclassing RestfulController
             var controllerType = IsRestfulController ? typeof(TController) : typeof(RestfulController);
@@ -65,7 +67,7 @@ namespace RestMvc
         /// For controllers that don't subclass RestfulController, this
         /// method will do nothing.
         /// </summary>
-        public virtual void MapHead(RouteCollection routes)
+        public virtual void MapHead()
         {
             if (!IsRestfulController)
                 return;
@@ -80,7 +82,7 @@ namespace RestMvc
         /// RestfulController, you can hook into the Options handling by
         /// overriding the Options method.
         /// </summary>
-        public virtual void MapOptions(RouteCollection routes)
+        public virtual void MapOptions()
         {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
             {

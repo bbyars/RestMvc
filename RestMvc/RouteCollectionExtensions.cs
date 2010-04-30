@@ -59,11 +59,11 @@ namespace RestMvc
         public static void Map<TController>(this RouteCollection routes, IRouteHandler routeHandler)
             where TController : ControllerBase
         {
-            var mapper = new ResourceMapper<TController>(routeHandler);
-            mapper.MapSupportedMethods(routes);
-            mapper.MapUnsupportedMethods(routes);
-            mapper.MapHead(routes);
-            mapper.MapOptions(routes);
+            var mapper = new ResourceMapper<TController>(routes, routeHandler);
+            mapper.MapSupportedMethods();
+            mapper.MapUnsupportedMethods();
+            mapper.MapHead();
+            mapper.MapOptions();
         }
     }
 }
