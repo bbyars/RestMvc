@@ -35,9 +35,9 @@ namespace RestMvc.UnitTests
             routes.Map<FirstController>();
 
             Assert.That("GET /First", Routes.To(new {controller = "First", action = "First"}, routes));
-            Assert.That("POST /First", Routes.To(new {controller = "First", action = RestfulController.MethodNotSupportedAction}, routes));
-            Assert.That("HEAD /First", Routes.To(new {controller = "First", action = RestfulController.HeadAction}, routes));
-            Assert.That("OPTIONS /First", Routes.To(new {controller = "First", action = RestfulController.OptionsAction}, routes));
+            Assert.That("POST /First", Routes.To(new {controller = "First", action = "MethodNotSupported"}, routes));
+            Assert.That("HEAD /First", Routes.To(new {controller = "First", action = "Head"}, routes));
+            Assert.That("OPTIONS /First", Routes.To(new {controller = "First", action = "Options"}, routes));
         }
 
         [Test]
@@ -47,17 +47,17 @@ namespace RestMvc.UnitTests
             routes.MapAssembly(Assembly.GetExecutingAssembly());
 
             Assert.That("GET /First", Routes.To(new {controller = "First", action = "First"}, routes));
-            Assert.That("POST /First", Routes.To(new {controller = "First", action = RestfulController.MethodNotSupportedAction}, routes));
-            Assert.That("HEAD /First", Routes.To(new {controller = "First", action = RestfulController.HeadAction}, routes));
-            Assert.That("OPTIONS /First", Routes.To(new {controller = "First", action = RestfulController.OptionsAction}, routes));
+            Assert.That("POST /First", Routes.To(new {controller = "First", action = "MethodNotSupported"}, routes));
+            Assert.That("HEAD /First", Routes.To(new {controller = "First", action = "Head"}, routes));
+            Assert.That("OPTIONS /First", Routes.To(new {controller = "First", action = "Options"}, routes));
 
             Assert.That("GET /Second", Routes.To(new {controller = "Second", action = "Second"}, routes));
-            Assert.That("POST /Second", Routes.To(new {controller = "Second", action = RestfulController.MethodNotSupportedAction}, routes));
-            Assert.That("HEAD /Second", Routes.To(new {controller = "Second", action = RestfulController.HeadAction}, routes));
-            Assert.That("OPTIONS /Second", Routes.To(new {controller = "Second", action = RestfulController.OptionsAction}, routes));
+            Assert.That("POST /Second", Routes.To(new {controller = "Second", action = "MethodNotSupported"}, routes));
+            Assert.That("HEAD /Second", Routes.To(new {controller = "Second", action = "Head"}, routes));
+            Assert.That("OPTIONS /Second", Routes.To(new {controller = "Second", action = "Options"}, routes));
 
             Assert.That("GET /NonRestful", Routes.To(new {controller = "NonRestful", action = "NonRestful"}, routes));
-            Assert.That("POST /NonRestful", Routes.To(new {controller = "Restful", action = RestfulController.MethodNotSupportedAction}, routes));
+            Assert.That("POST /NonRestful", Routes.To(new {controller = "Restful", action = "MethodNotSupported"}, routes));
         }
     }
 }

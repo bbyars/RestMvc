@@ -5,19 +5,27 @@ namespace RestMvc
 {
     /// <summary>
     /// Provides support for automatically handling OPTIONS and HEAD requests.
+    /// You can use RestMvc without subclassing RestfulController.  The only
+    /// reason you might want to subclass is because it gives you an opportunity
+    /// to override the handling of HEAD and OPTIONS requests.
     /// </summary>
     public class RestfulController : Controller
     {
-        public const string MethodNotSupportedAction = "MethodNotSupported";
-        public const string HeadAction = "Head";
-        public const string OptionsAction = "Options";
-
+        /// <summary>
+        /// The action called on any HTTP OPTIONS request.
+        /// </summary>
+        /// <param name="resourceUri">The URI template</param>
+        /// <returns>An empty result, with the Allow header set</returns>
         public virtual ActionResult Options(string resourceUri)
         {
             SetAllowHeader(resourceUri);
             return new EmptyResult();
         }
 
+        /// <summary>
+        /// The action called on any HTTP HEAD request.
+        /// </summary>
+        /// <param name="resourceUri">The URI template</param>
         public virtual void Head(string resourceUri)
         {
             var action = GetType().GetAction("GET", resourceUri);
@@ -28,6 +36,11 @@ namespace RestMvc
             Response.End();
         }
 
+        /// <summary>
+        /// The method called when an HTTP method was called for a resource
+        /// that does not support that method.
+        /// </summary>
+        /// <param name="resourceUri">The URI template</param>
         public virtual void MethodNotSupported(string resourceUri)
         {
             SetAllowHeader(resourceUri);

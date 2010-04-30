@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -52,14 +51,8 @@ namespace RestMvc
         {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
             {
-                var defaults = Defaults(RestfulController.MethodNotSupportedAction, resourceUri);
-                if (!IsRestfulController)
-                {
-                    defaults["controller"] = typeof(RestfulController).GetControllerName();
-                    defaults["controllerType"] = typeof(TController);
-                }
                 foreach (var method in typeof(TController).GetUnsupportedMethods(resourceUri))
-                    Map(routes, resourceUri, defaults, method);
+                    Map(routes, resourceUri, Defaults("MethodNotSupported", resourceUri), method);
             }
         }
 
@@ -75,7 +68,7 @@ namespace RestMvc
             if (!IsRestfulController)
                 return;
 
-            MapAllResources(routes, RestfulController.HeadAction, "HEAD");
+            MapAllResources("Head");
         }
 
         /// <summary>
@@ -87,27 +80,18 @@ namespace RestMvc
         /// </summary>
         public virtual void MapOptions()
         {
+            MapAllResources("Options");
+        }
+
+        private void MapAllResources(string method)
+        {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
-            {
-                var defaults = Defaults(RestfulController.OptionsAction, resourceUri);
-                if (!IsRestfulController)
-                {
-                    defaults["controller"] = typeof(RestfulController).GetControllerName();
-                    defaults["controllerType"] = typeof(TController);
-                }
-                Map(routes, resourceUri, defaults, "OPTIONS");
-            }
+                Map(routes, resourceUri, Defaults(method, resourceUri), method.ToUpper());
         }
 
         private static bool IsRestfulController
         {
             get { return typeof(TController).IsSubclassOf(typeof(RestfulController)); }
-        }
-
-        private void MapAllResources(ICollection<RouteBase> routes, string actionName, string httpMethod)
-        {
-            foreach (var resourceUri in typeof(TController).GetResourceUris())
-                Map(routes, resourceUri, Defaults(actionName, resourceUri), httpMethod);
         }
 
         private void Map(ICollection<RouteBase> routes, string urlFormat,
@@ -128,16 +112,14 @@ namespace RestMvc
 
         private static RouteValueDictionary Defaults(string actionName, string resourceUri)
         {
-            var result = Defaults(actionName);
-            result.Add("resourceUri", resourceUri);
-            return result;
-        }
-
-        private static RouteValueDictionary Defaults(Type controller, string actionName, string resourceUri)
-        {
-            var result = Defaults(actionName, resourceUri);
-            result["controller"] = controller.GetControllerName();
-            return result;
+            var defaults = Defaults(actionName);
+            defaults.Add("resourceUri", resourceUri);
+            if (!IsRestfulController)
+            {
+                defaults["controller"] = typeof(RestfulController).GetControllerName();
+                defaults["controllerType"] = typeof(TController);
+            }
+            return defaults;
         }
     }
 }
