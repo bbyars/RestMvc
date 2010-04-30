@@ -22,9 +22,7 @@ namespace RestMvc
         public virtual void Head(string resourceUri)
         {
             var action = GetType().GetAction("GET", resourceUri);
-//            ActionInvoker.InvokeAction(ControllerContext, action.Name);
-            var result = (ActionResult)action.Invoke(this, new object[0]);
-            result.ExecuteResult(ControllerContext);
+            ActionInvoker.InvokeAction(ControllerContext, action.Name);
 
             Response.Headers["Content-Length"] = Response.Output.ToString().Length.ToString();
             Response.SuppressContent = true;

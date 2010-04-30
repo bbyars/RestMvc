@@ -1,9 +1,9 @@
-* Handling HEAD does not work (2 ignored tests)
+* Handling HEAD does not work (ignored tests)
 * Handle X-METHOD-OVERRIDE header
 * Handle tunneling PUT and DELETE through POST for HTML forms
 ** Consider using another route handler decorator, and doing it like Rails (_method form data)
 * Handle media type modifiers (e.g. text/html; q=0.8)
 ** Test backward routing (creating URLs) with multiple routes
-* Map HEAD and OPTIONS even without subclassing (take the controller name as a parameter)
+* Map HEAD even without subclassing
+** Test HEAD with filters
 * Get build working on IIS < 7
-* Make routes instance field in ResourceMapper

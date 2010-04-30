@@ -9,7 +9,32 @@ namespace RestMvc.UnitTests
 {
     public static class TestExtensions
     {
-        public static RestfulController WithStubbedResponse(this RestfulController controller)
+        public static RestfulController WithRouteValue(this RestfulController controller, string key, object value)
+        {
+            controller.RouteData.Values[key] = value;
+            return controller;
+        }
+
+        public static RestfulController WithStubbedContext(this RestfulController controller)
+        {
+            var context = new Mock<ControllerContext>();
+            context.Setup(c => c.HttpContext.Request).Returns(GetRequestStub().Object);
+            context.Setup(c => c.HttpContext.Response).Returns(GetResponseStub().Object);
+            context.Setup(c => c.Controller).Returns(controller);
+
+            var route = new RouteData();
+            context.Setup(c => c.RouteData).Returns(route);
+
+            controller.ControllerContext = context.Object;
+            return controller;
+        }
+
+        private static Mock<HttpRequestBase> GetRequestStub()
+        {
+            return new Mock<HttpRequestBase>();
+        }
+
+        private static Mock<HttpResponseBase> GetResponseStub()
         {
             var headers = new NameValueCollection();
             var output = new StringWriter();
@@ -20,21 +45,7 @@ namespace RestMvc.UnitTests
             response.Setup(r => r.Write(It.IsAny<string>())).Callback((string s) => output.Write(s));
             response.Setup(r => r.End()).Callback(
                 () => output.GetStringBuilder().Remove(0, output.GetStringBuilder().Length));
-
-            var context = new Mock<ControllerContext>();
-            context.Setup(c => c.HttpContext.Response).Returns(response.Object);
-
-            var route = new RouteData();
-            context.Setup(c => c.RouteData).Returns(route);
-
-            controller.ControllerContext = context.Object;
-            return controller;
-        }
-
-        public static RestfulController WithRouteValue(this RestfulController controller, string key, object value)
-        {
-            controller.RouteData.Values[key] = value;
-            return controller;
+            return response;
         }
     }
 }

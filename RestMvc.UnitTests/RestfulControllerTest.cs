@@ -36,7 +36,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void MethodNotSupportedShouldReturn405()
         {
-            var controller = new TestController().WithStubbedResponse();
+            var controller = new TestController().WithStubbedContext();
 
             controller.MethodNotSupported("test");
 
@@ -46,7 +46,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void MethodNotSupportedShouldSetAllowHeader()
         {
-            var controller = new TestController().WithStubbedResponse();
+            var controller = new TestController().WithStubbedContext();
 
             controller.MethodNotSupported("test");
 
@@ -56,7 +56,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void OptionsShouldSetAllowHeader()
         {
-            var controller = new TestController().WithStubbedResponse();
+            var controller = new TestController().WithStubbedContext();
 
             controller.Options("test/{id}");
 
@@ -66,7 +66,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void OptionsShouldSetAllowHeaderForResourceWithoutSubclassing()
         {
-            var controller = new RestfulController().WithStubbedResponse()
+            var controller = new RestfulController().WithStubbedContext()
                 .WithRouteValue("controllerType", typeof(DifferentSubclassController));
 
             controller.Options("test");
@@ -77,7 +77,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void HeadShouldSendHeadersSetInGetMethod()
         {
-            var controller = new TestController().WithStubbedResponse();
+            var controller = new TestController().WithStubbedContext();
 
             controller.Head("test");
 
@@ -87,7 +87,7 @@ namespace RestMvc.UnitTests
         [Test]
         public void HeadShouldSetContentLengthHeaderButClearBody()
         {
-            var controller = new TestController().WithStubbedResponse();
+            var controller = new TestController().WithStubbedContext();
 
             controller.Head("test");
 
@@ -95,16 +95,18 @@ namespace RestMvc.UnitTests
             Assert.That(controller.Response.Output.ToString(), Is.EqualTo(""));
         }
 
-        [Test, Ignore]
+        [Test]
         public void HeadShouldDelegateToGetMethodWithParameters()
         {
-            var controller = new TestController().WithStubbedResponse();
-            controller.RouteData.Values["id"] = "world";
+            var controller = new TestController().WithStubbedContext()
+                .WithRouteValue("id", "world");
+            controller.ValueProvider = new RouteDataValueProvider(controller.ControllerContext);
 
             controller.Head("test/{id}");
 
             Assert.That(controller.Response.Headers["Content-Length"],
                 Is.EqualTo("hello world".Length.ToString()));
+            Assert.That(controller.Response.Output.ToString(), Is.EqualTo(""));
         }
     }
 }
