@@ -61,5 +61,12 @@ namespace RestMvc.FunctionalTests
             var response = new HttpRequest("POST", nonRestfulUri).GetResponse();
             Assert.That(response.StatusCode, Is.EqualTo(405));
         }
+
+        [Test]
+        public void NonRestfulControllerSupportsOptions()
+        {
+            var response = new HttpRequest("OPTIONS", nonRestfulUri).GetResponse();
+            Assert.That(response.Headers["Allow"], Is.EqualTo("GET"));
+        }
     }
 }

@@ -134,14 +134,15 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
-        public void ShouldNotMapOptionsWithoutSubclassing()
+        public void ShouldMapOptionsToDifferentControllerWithoutSubclassing()
         {
             var routes = new RouteCollection();
             var mapper = new ResourceMapper<DifferentSuperclassController>(new MvcRouteHandler());
 
             mapper.MapOptions(routes);
 
-            Assert.That(routes.Count, Is.EqualTo(0));
+            Assert.That("OPTIONS /test", Routes.To(
+                new {controller = "Restful", action = "Options", resourceUri = "Test", controllerType = typeof(DifferentSuperclassController)}, routes));
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Web.Mvc;
 
 namespace RestMvc
@@ -13,7 +14,8 @@ namespace RestMvc
 
         public virtual ActionResult Options(string resourceUri)
         {
-            SetAllowHeader(resourceUri);
+            var type = (Type)RouteData.Values["controllerType"] ?? GetType();
+            SetAllowHeader(resourceUri, type);
             return new EmptyResult();
         }
 
@@ -37,9 +39,14 @@ namespace RestMvc
             Response.End();
         }
 
-        private void SetAllowHeader(string resourceUri)
+        protected virtual void SetAllowHeader(string resourceUri)
         {
-            Response.Headers["Allow"] = string.Join(", ", GetType().GetSupportedMethods(resourceUri));
+            SetAllowHeader(resourceUri, GetType());
+        }
+
+        private void SetAllowHeader(string resourceUri, Type type)
+        {
+            Response.Headers["Allow"] = string.Join(", ", type.GetSupportedMethods(resourceUri));
         }
     }
 }

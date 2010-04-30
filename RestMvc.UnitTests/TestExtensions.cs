@@ -30,5 +30,11 @@ namespace RestMvc.UnitTests
             controller.ControllerContext = context.Object;
             return controller;
         }
+
+        public static RestfulController WithRouteValue(this RestfulController controller, string key, object value)
+        {
+            controller.RouteData.Values[key] = value;
+            return controller;
+        }
     }
 }

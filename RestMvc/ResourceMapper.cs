@@ -76,17 +76,22 @@ namespace RestMvc
         /// <summary>
         /// For every resource URI referenced in a ResourceActionAttribute,
         /// maps the OPTIONS method to a RestfulController action that knows
-        /// how to respond appropriately.
-        /// For controllers that don't subclass RestfulController, this
-        /// method will do nothing.
+        /// how to respond appropriately.  If your controller subclasses
+        /// RestfulController, you can hook into the Options handling by
+        /// overriding the Options method.
         /// </summary>
-        /// <param name="routes"></param>
         public virtual void MapOptions(RouteCollection routes)
         {
-            if (!IsRestfulController)
-                return;
-
-            MapAllResources(routes, RestfulController.OptionsAction, "OPTIONS");
+            foreach (var resourceUri in typeof(TController).GetResourceUris())
+            {
+                var defaults = Defaults(RestfulController.OptionsAction, resourceUri);
+                if (!IsRestfulController)
+                {
+                    defaults["controller"] = typeof(RestfulController).GetControllerName();
+                    defaults["controllerType"] = typeof(TController);
+                }
+                Map(routes, resourceUri, defaults, "OPTIONS");
+            }
         }
 
         private static bool IsRestfulController

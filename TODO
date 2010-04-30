@@ -6,3 +6,4 @@
 ** Test backward routing (creating URLs) with multiple routes
 * Map HEAD and OPTIONS even without subclassing (take the controller name as a parameter)
 * Get build working on IIS < 7
+* Make routes instance field in ResourceMapper

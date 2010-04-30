@@ -18,13 +18,19 @@ namespace RestMvc.UnitTests
             }
 
             [Post("test")]
-            public ActionResult Create() { return null; }
+            public void Create() { }
 
             [Get("test/{id}")]
             public ActionResult Show(string id)
             {
                 return new ContentResult {Content = "hello " + id};
             }
+        }
+
+        public class DifferentSubclassController : Controller
+        {
+            [Get("test")]
+            public void Test() { }
         }
 
         [Test]
@@ -53,6 +59,17 @@ namespace RestMvc.UnitTests
             var controller = new TestController().WithStubbedResponse();
 
             controller.Options("test/{id}");
+
+            Assert.That(controller.Response.Headers["Allow"], Is.EqualTo("GET"));
+        }
+
+        [Test]
+        public void OptionsShouldSetAllowHeaderForResourceWithoutSubclassing()
+        {
+            var controller = new RestfulController().WithStubbedResponse()
+                .WithRouteValue("controllerType", typeof(DifferentSubclassController));
+
+            controller.Options("test");
 
             Assert.That(controller.Response.Headers["Allow"], Is.EqualTo("GET"));
         }
