@@ -8,6 +8,11 @@ using System.Web.Caching;
 
 namespace RestMvc
 {
+    /// <summary>
+    /// Acts as a proxy to the real HttpResponse during HEAD requests.
+    /// Used only to capture the output stream without actually sending
+    /// it to the client.
+    /// </summary>
     public class ResponseWithReadableOutputStream : HttpResponseBase
     {
         private readonly HttpResponseBase proxiedResponse;
@@ -18,9 +23,12 @@ namespace RestMvc
             this.proxiedResponse = proxiedResponse;
         }
 
+        /// <summary>
+        /// Returns the contents of the output stream converted to a string
+        /// </summary>
         public virtual string OutputText
         {
-            get { return output.GetStringBuilder().ToString(); }
+            get { return output.ToString(); }
         }
 
         public override TextWriter Output
@@ -29,10 +37,25 @@ namespace RestMvc
         }
 
         // Sadly, HttpResponse does not use the encapsulation it provides for
-        // writing to it's Output writer, so we also fix these methods as well.
+        // writing to it's Output writer, so we're forced to change these methods as well
         public override void Write(string s)
         {
-            output.Write(s);
+            Output.Write(s);
+        }
+
+        public override void Write(char ch)
+        {
+            Output.Write(ch);
+        }
+
+        public override void Write(char[] buffer, int index, int count)
+        {
+            Output.Write(buffer, index, count);
+        }
+
+        public override void Write(object obj)
+        {
+            Output.Write(obj);
         }
 
         #region Proxied Methods
@@ -301,21 +324,6 @@ namespace RestMvc
         {
             get { return proxiedResponse.TrySkipIisCustomErrors; }
             set { proxiedResponse.TrySkipIisCustomErrors = value; }
-        }
-
-        public override void Write(char ch)
-        {
-            proxiedResponse.Write(ch);
-        }
-
-        public override void Write(char[] buffer, int index, int count)
-        {
-            proxiedResponse.Write(buffer, index, count);
-        }
-
-        public override void Write(object obj)
-        {
-            proxiedResponse.Write(obj);
         }
 
         public override void WriteFile(IntPtr fileHandle, long offset, long size)

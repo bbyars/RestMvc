@@ -1,4 +1,3 @@
-* Handling HEAD does not work (ignored tests)
 * Handle X-METHOD-OVERRIDE header
 * Handle tunneling PUT and DELETE through POST for HTML forms
 ** Consider using another route handler decorator, and doing it like Rails (_method form data)
@@ -7,4 +6,3 @@
 * Map HEAD even without subclassing
 ** Test HEAD with filters
 * Get build working on IIS < 7
-* test coverage on proxy classes
