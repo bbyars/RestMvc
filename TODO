@@ -7,3 +7,4 @@
 * Map HEAD even without subclassing
 ** Test HEAD with filters
 * Get build working on IIS < 7
+* test coverage on proxy classes

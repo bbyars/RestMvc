@@ -41,6 +41,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assertions\HasSameHeaders.cs" />
     <Compile Include="ConnegTests.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using RestMvc.FunctionalTests.Assertions;
 
 namespace RestMvc.FunctionalTests
 {
@@ -38,14 +39,14 @@ namespace RestMvc.FunctionalTests
             Assert.That(response.Body, Is.EqualTo(""));
         }
 
-        [Test, Ignore]
+        [Test]
         public void HeadShouldSendBackSameHeadersAsGetWithEmptyBody()
         {
             var getResponse = new HttpRequest("GET", echoUri).GetResponse();
             var headResponse = new HttpRequest("HEAD", echoUri).GetResponse();
 
             Assert.That(headResponse.Body, Is.EqualTo(""));
-            Assert.That(headResponse.Headers["Content-Length"], Is.EqualTo(getResponse.Headers["Content-Length"]));
+            Assert.That(headResponse, HasSameHeaders.As(getResponse));
         }
 
         [Test]

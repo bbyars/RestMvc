@@ -17,15 +17,11 @@ namespace RestMvc.UnitTests
 
         public static RestfulController WithStubbedContext(this RestfulController controller)
         {
-            var context = new Mock<ControllerContext>();
-            context.Setup(c => c.HttpContext.Request).Returns(GetRequestStub().Object);
-            context.Setup(c => c.HttpContext.Response).Returns(GetResponseStub().Object);
-            context.Setup(c => c.Controller).Returns(controller);
+            var context = new Mock<HttpContextBase>();
+            context.Setup(c => c.Request).Returns(GetRequestStub().Object);
+            context.Setup(c => c.Response).Returns(GetResponseStub().Object);
 
-            var route = new RouteData();
-            context.Setup(c => c.RouteData).Returns(route);
-
-            controller.ControllerContext = context.Object;
+            controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
             return controller;
         }
 
@@ -43,8 +39,6 @@ namespace RestMvc.UnitTests
             response.Setup(r => r.Headers).Returns(headers);
             response.Setup(r => r.Output).Returns(output);
             response.Setup(r => r.Write(It.IsAny<string>())).Callback((string s) => output.Write(s));
-            response.Setup(r => r.End()).Callback(
-                () => output.GetStringBuilder().Remove(0, output.GetStringBuilder().Length));
             return response;
         }
     }

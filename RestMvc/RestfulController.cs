@@ -29,9 +29,15 @@ namespace RestMvc
         public virtual void Head(string resourceUri)
         {
             var action = GetType().GetAction("GET", resourceUri);
-            ActionInvoker.InvokeAction(ControllerContext, action.Name);
+            string output;
+            using (var proxy = new HttpContextWithReadableOutputStream(this))
+            {
+                ActionInvoker.InvokeAction(ControllerContext, action.Name);
+                output = proxy.GetResponseText();
+            }
 
-            Response.Headers["Content-Length"] = Response.Output.ToString().Length.ToString();
+            Response.Headers["Content-Length"] = output.Length.ToString();
+            Response.Headers["Content-Type"] = string.Format("{0}; charset={1}", Response.ContentType, Response.Charset);
             Response.SuppressContent = true;
             Response.End();
         }
