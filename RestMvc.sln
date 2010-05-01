@@ -1,10 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc", "RestMvc\RestMvc.csproj", "{85332B0C-2A3E-4348-B1BF-03A2A804810E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.UnitTests", "RestMvc.UnitTests\RestMvc.UnitTests.csproj", "{5C8EF5A3-161B-499F-AD8E-5CF76825883A}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C75FA761-7C5E-4B1F-AD0C-2F55E798AEC3}"
 	ProjectSection(SolutionItems) = preProject
 		CONTRIBUTORS = CONTRIBUTORS
@@ -13,16 +9,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO = TODO
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.Example", "RestMvc.Example\RestMvc.Example.csproj", "{53A447B8-5934-411C-A965-A4EFE1F119FA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.FunctionalTests", "RestMvc.FunctionalTests\RestMvc.FunctionalTests.csproj", "{7A2F35DF-3106-4601-BC2F-0650178687D1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{C593FB55-E26B-4501-B292-D0AFDAFD28A9}"
 	ProjectSection(SolutionItems) = preProject
 		build.bat = build.bat
 		NCover.targets = NCover.targets
 		RestMvc.proj = RestMvc.proj
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc", "RestMvc\RestMvc.csproj", "{85332B0C-2A3E-4348-B1BF-03A2A804810E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.UnitTests", "RestMvc.UnitTests\RestMvc.UnitTests.csproj", "{5C8EF5A3-161B-499F-AD8E-5CF76825883A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.Example", "RestMvc.Example\RestMvc.Example.csproj", "{53A447B8-5934-411C-A965-A4EFE1F119FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestMvc.FunctionalTests", "RestMvc.FunctionalTests\RestMvc.FunctionalTests.csproj", "{7A2F35DF-3106-4601-BC2F-0650178687D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

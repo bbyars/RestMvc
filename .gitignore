@@ -14,3 +14,5 @@ RestMvc.UnitTests/RestMvc.UnitTests.csproj.user
 RestMvc.sln.cache
 TestResult.xml
 _ReSharper.RestMvc
+RestMvc.Example/RestMvc.Example.csproj.user
+RestMvc.FunctionalTests/RestMvc.FunctionalTests.csproj.user
