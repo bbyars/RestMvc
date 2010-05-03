@@ -8,7 +8,7 @@ namespace RestMvc.Example
         [Get("/nonRestful")]
         public ActionResult Test()
         {
-            return new ContentResult {Content = "OK"};
+            return new ContentResult {Content = "OK", ContentType = "text/plain"};
         }
     }
 }

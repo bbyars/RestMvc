@@ -75,7 +75,8 @@ namespace RestMvc
                 return this;
 
             var factory = ControllerBuilder.Current.GetControllerFactory();
-            var controller = (Controller)factory.CreateController(ControllerContext.RequestContext, GetControllerType().Name);
+            var controllerName = GetControllerType().Name.Replace("Controller", "");
+            var controller = (Controller)factory.CreateController(ControllerContext.RequestContext, controllerName);
             controller.ControllerContext = new ControllerContext(ControllerContext.HttpContext, RouteData, controller);
             return controller;
         }

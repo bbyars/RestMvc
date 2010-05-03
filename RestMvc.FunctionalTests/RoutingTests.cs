@@ -72,7 +72,7 @@ namespace RestMvc.FunctionalTests
             Assert.That(response.Headers["Allow"], Is.EqualTo("GET"));
         }
 
-        [Test, Ignore("Not yet working...")]
+        [Test]
         public void NonRestfulControllerSupportsHead()
         {
             var getResponse = new HttpRequest("GET", nonRestfulUri).GetResponse();

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -37,7 +36,7 @@ namespace RestMvc
             {
                 var attribute = action.GetResourceActionAttribute();
                 foreach (var uri in attribute.ResourceUris)
-                    Map(routes, uri, Defaults(action.Name), attribute.HttpMethod);
+                    Map(uri, Defaults(action.Name), attribute.HttpMethod);
             }
         }
 
@@ -52,7 +51,7 @@ namespace RestMvc
             foreach (var resourceUri in typeof(TController).GetResourceUris())
             {
                 foreach (var method in typeof(TController).GetUnsupportedMethods(resourceUri))
-                    Map(routes, resourceUri, Defaults("MethodNotSupported", resourceUri), method);
+                    Map(resourceUri, Defaults("MethodNotSupported", resourceUri), method);
             }
         }
 
@@ -83,7 +82,7 @@ namespace RestMvc
         private void MapAllResources(string method)
         {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
-                Map(routes, resourceUri, Defaults(method, resourceUri), method.ToUpper());
+                Map(resourceUri, Defaults(method, resourceUri), method.ToUpper());
         }
 
         private static bool IsRestfulController
@@ -91,8 +90,7 @@ namespace RestMvc
             get { return typeof(TController).IsSubclassOf(typeof(RestfulController)); }
         }
 
-        private void Map(ICollection<RouteBase> routes, string urlFormat,
-            RouteValueDictionary defaults, string httpMethod)
+        private void Map(string urlFormat, RouteValueDictionary defaults, string httpMethod)
         {
             routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
