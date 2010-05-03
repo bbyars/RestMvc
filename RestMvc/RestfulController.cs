@@ -28,15 +28,7 @@ namespace RestMvc
         /// <param name="resourceUri">The URI template</param>
         public virtual void Head(string resourceUri)
         {
-            var action = GetType().GetAction("GET", resourceUri);
-            string output;
-            using (var proxy = new HttpContextWithReadableOutputStream(this))
-            {
-                ActionInvoker.InvokeAction(ControllerContext, action.Name);
-                output = proxy.GetResponseText();
-            }
-
-            Response.Headers["Content-Length"] = output.Length.ToString();
+            Response.Headers["Content-Length"] = GetResourceOutput(resourceUri).Length.ToString();
             Response.Headers["Content-Type"] = string.Format("{0}; charset={1}", Response.ContentType, Response.Charset);
             Response.SuppressContent = true;
             Response.End();
@@ -57,8 +49,35 @@ namespace RestMvc
 
         private void SetAllowHeader(string resourceUri)
         {
-            var type = (Type)RouteData.Values["controllerType"] ?? GetType();
-            Response.Headers["Allow"] = string.Join(", ", type.GetSupportedMethods(resourceUri));
+            Response.Headers["Allow"] = string.Join(", ", GetControllerType().GetSupportedMethods(resourceUri));
+        }
+
+        private Type GetControllerType()
+        {
+            return (Type)RouteData.Values["controllerType"] ?? GetType();
+        }
+
+        private string GetResourceOutput(string resourceUri)
+        {
+            var action = GetControllerType().GetAction("GET", resourceUri);
+            var controller = GetController();
+
+            using (var proxy = new HttpContextWithReadableOutputStream(controller))
+            {
+                controller.ActionInvoker.InvokeAction(controller.ControllerContext, action.Name);
+                return proxy.GetResponseText();
+            }
+        }
+
+        private Controller GetController()
+        {
+            if (GetType().Equals(GetControllerType()))
+                return this;
+
+            var factory = ControllerBuilder.Current.GetControllerFactory();
+            var controller = (Controller)factory.CreateController(ControllerContext.RequestContext, GetControllerType().Name);
+            controller.ControllerContext = new ControllerContext(ControllerContext.HttpContext, RouteData, controller);
+            return controller;
         }
     }
 }

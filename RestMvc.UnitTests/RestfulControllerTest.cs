@@ -1,4 +1,6 @@
+using System;
 using System.Web.Mvc;
+using System.Web.Routing;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Attributes;
@@ -30,7 +32,33 @@ namespace RestMvc.UnitTests
         public class DifferentSubclassController : Controller
         {
             [Get("test")]
-            public void Test() { }
+            public ActionResult Test()
+            {
+                return new ContentResult {Content = "test"};
+            }
+        }
+
+        public class TestControllerFactory : IControllerFactory, IDisposable
+        {
+            private readonly IControllerFactory factory;
+
+            public TestControllerFactory()
+            {
+                factory = ControllerBuilder.Current.GetControllerFactory();
+                ControllerBuilder.Current.SetControllerFactory(this);
+            }
+
+            public IController CreateController(RequestContext requestContext, string controllerName)
+            {
+                return new DifferentSubclassController();
+            }
+
+            public void ReleaseController(IController controller) { }
+
+            public void Dispose()
+            {
+                ControllerBuilder.Current.SetControllerFactory(factory);
+            }
         }
 
         [Test]
@@ -118,6 +146,20 @@ namespace RestMvc.UnitTests
             Assert.That(controller.Response.Headers["Content-Length"],
                 Is.EqualTo("hello world".Length.ToString()));
             Assert.That(controller.Response.Output.ToString(), Is.EqualTo(""));
+        }
+
+        [Test]
+        public void HeadShouldBeHandledWithoutSubclassing()
+        {
+            using (new TestControllerFactory())
+            {
+                var controller = new RestfulController().WithStubbedContext()
+                    .WithRouteValue("controllerType", typeof(DifferentSubclassController));
+
+                controller.Head("test");
+
+                Assert.That(controller.Response.Headers["Content-Length"], Is.EqualTo("test".Length.ToString()));
+            }
         }
     }
 }

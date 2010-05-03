@@ -13,7 +13,7 @@ namespace RestMvc
     /// URI templates.
     /// </summary>
     /// <typeparam name="TController">The type of controller to add routes for</typeparam>
-    public class ResourceMapper<TController> where TController : ControllerBase
+    public class ResourceMapper<TController> where TController : Controller
     {
         private readonly RouteCollection routes;
         private readonly IRouteHandler routeHandler;
@@ -65,9 +65,6 @@ namespace RestMvc
         /// </summary>
         public virtual void MapHead()
         {
-            if (!IsRestfulController)
-                return;
-
             MapAllResources("Head");
         }
 

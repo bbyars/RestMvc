@@ -8,7 +8,7 @@ It was largely inspired by the Ruby framework Sinatra (http://www.sinatrarb.com/
 
 2. Examples
 
-public class OrdersController : RestfulController
+public class OrdersController : Controller
 {
     [Get("/orders")]
     public ActionResult Index() { ... }
@@ -24,11 +24,17 @@ public class OrdersController : RestfulController
 RouteTable.Routes.Map<OrdersController>();
 
 The code above will do the following:
-* Create the three routes defined by the HTTP methods and URI templates in the attributes
+* Create the three routes defined by the HTTP methods and URI templates in the attributes.
+  Even though System.Web.Routing does not allow you to prefix URI templates with either
+  / or ~/, I find allowing those prefixes can enhance readability, and thus they are allowed.
 * Route HEAD and OPTIONS methods for the two URI templates ("orders" and "orders/{id}")
-  to a superclass method capable of handling those methods intelligently.
+  to a method capable of handling those methods intelligently.
 * Route the remaining (non-WebDAV) methods for both URI templates to a method
-  that knows to return a 405 HTTP status code (Method Not Supported).
+  that knows to return a 405 HTTP status code (Method Not Supported) with an appropriate
+  Allow header.  This method and the ones that handle HEAD and OPTIONS are defined as virtual
+  on RestfulController.  If you want them mapped by RestMvc, but want to customize them
+  (e.g., adding a body on OPTIONS), you can subclass RestfulController and override the
+  appropriate methods.
 * Notice the optional format parameter on the GET method actions (Show uses it;
   Index does not).  Routes with an extension are routed such that the extension
   gets passed as the format parameter, if the resource supports multiple representations

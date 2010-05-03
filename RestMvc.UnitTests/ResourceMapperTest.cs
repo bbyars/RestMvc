@@ -110,14 +110,15 @@ namespace RestMvc.UnitTests
         }
 
         [Test]
-        public void ShouldNotMapHeadWithoutSubclassing()
+        public void ShouldMapHeadToDifferentControllerWithoutSubclassing()
         {
             var routes = new RouteCollection();
             var mapper = new ResourceMapper<DifferentSuperclassController>(routes, new MvcRouteHandler());
 
             mapper.MapHead();
 
-            Assert.That(routes.Count, Is.EqualTo(0));
+            Assert.That("HEAD /test", Routes.To(
+                new {controller = "Restful", action = "Head", resourceUri = "Test", controllerType = typeof(DifferentSuperclassController)}, routes));
         }
 
         [Test]

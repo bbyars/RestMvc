@@ -9,13 +9,15 @@ namespace RestMvc.UnitTests
 {
     public static class TestExtensions
     {
-        public static RestfulController WithRouteValue(this RestfulController controller, string key, object value)
+        public static TController WithRouteValue<TController>(this TController controller, string key, object value)
+            where TController : Controller
         {
             controller.RouteData.Values[key] = value;
             return controller;
         }
 
-        public static RestfulController WithStubbedContext(this RestfulController controller)
+        public static TController WithStubbedContext<TController>(this TController controller)
+            where TController : Controller
         {
             var context = new Mock<HttpContextBase>();
             context.Setup(c => c.Request).Returns(GetRequestStub().Object);
