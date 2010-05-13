@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,11 +17,18 @@ namespace RestMvc.Conneg
     {
         private readonly IRouteHandler proxiedHandler;
         private readonly MediaTypeFormatMap map;
+        private readonly ConnegPriorityGivenTo priority;
 
         public SimpleContentNegotiationRouteProxy(IRouteHandler proxiedHandler, MediaTypeFormatMap map)
+            : this(proxiedHandler, map, ConnegPriorityGivenTo.Client)
+        {
+        }
+
+        public SimpleContentNegotiationRouteProxy(IRouteHandler proxiedHandler, MediaTypeFormatMap map, ConnegPriorityGivenTo priority)
         {
             this.proxiedHandler = proxiedHandler;
             this.map = map;
+            this.priority = priority;
         }
 
         public virtual IHttpHandler GetHttpHandler(RequestContext requestContext)
@@ -42,13 +50,20 @@ namespace RestMvc.Conneg
                 route.Values["format"] = FormatFor(acceptTypes);
         }
 
-        private string FormatFor(IEnumerable<string> acceptTypes)
+        private string FormatFor(string[] acceptTypes)
         {
-            if (acceptTypes == null)
+            if (!SupportsAcceptType(acceptTypes))
                 return map.DefaultFormat;
 
-            var acceptType = acceptTypes.FirstOrDefault(accept => map.SupportsMediaType(accept));
-            return acceptType == null ? map.DefaultFormat : map.FormatFor(acceptType);
+            if (priority == ConnegPriorityGivenTo.Client)
+                acceptTypes = new[] {acceptTypes.First(accept => map.SupportsMediaType(accept))};
+
+            return map.FormatFor(acceptTypes);
+        }
+
+        private bool SupportsAcceptType(IEnumerable<string> acceptTypes)
+        {
+            return acceptTypes != null && acceptTypes.Any(accept => map.SupportsMediaType(accept));
         }
     }
 }

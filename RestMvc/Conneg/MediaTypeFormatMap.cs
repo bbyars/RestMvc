@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RestMvc.Conneg
 {
@@ -16,7 +17,7 @@ namespace RestMvc.Conneg
         /// </summary>
         public virtual string DefaultFormat
         {
-            get { return map.Count == 0 ? "" : map[0].Value; }
+            get { return map.Count == 0 ? null : map[0].Value; }
         }
 
         /// <summary>
@@ -37,14 +38,16 @@ namespace RestMvc.Conneg
         }
 
         /// <summary>
-        /// Returns the format for the provided mediaType, which can match
-        /// by wildcard (e.g. text/*, */*)
+        /// Returns the format for the first entry in this map that matches any of the 
+        /// media types in the given array.  Wildcard matches (e.g. text/*, */*) are acceptable.
+        /// Since entries in this map take precedence over entries in the given array, this provides
+        /// a way for the server to set priority over the client, if desired.
         /// </summary>
-        public virtual string FormatFor(string mediaType)
+        public virtual string FormatFor(params string[] mediaTypes)
         {
             foreach (var pair in map)
             {
-                if (pair.Key.Matches(mediaType))
+                if (mediaTypes.Any(mediaType => pair.Key.Matches(mediaType)))
                     return pair.Value;
             }
             return null;

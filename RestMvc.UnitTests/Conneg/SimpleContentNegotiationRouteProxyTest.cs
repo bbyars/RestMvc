@@ -14,11 +14,11 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldMapMediaTypeToFormat()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
-            router.AddFormat(route, new[] { "*/*" });
+            router.AddFormat(route, new[] {"*/*"});
 
             Assert.That(route.Values["format"], Is.EqualTo("xml"));
         }
@@ -27,12 +27,12 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldNotSetFormatIfRoutingSystemAlreadyDetectedIt()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
             route.Values["format"] = "html";
 
-            router.AddFormat(route, new[] { "*/*" });
+            router.AddFormat(route, new[] {"*/*"});
 
             Assert.That(route.Values["format"], Is.EqualTo("html"));
         }
@@ -41,7 +41,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldUseDefaultFormatIfNoAcceptTypesProvided()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
@@ -54,7 +54,7 @@ namespace RestMvc.UnitTests.Conneg
         public void ShouldUseDefaultFormatIfNullAcceptTypesProvided()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
@@ -64,15 +64,43 @@ namespace RestMvc.UnitTests.Conneg
         }
 
         [Test]
-        public void ShouldPrioritizeFormatSelectionByAcceptTypeOrdering()
+        public void ShouldPrioritizeFormatSelectionByAcceptTypeOrderingByDefault()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             map.Add("text/html", "html");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
-            router.AddFormat(route, new[] { "text/html", "text/xml" });
+            router.AddFormat(route, new[] {"text/html", "application/xml"});
+
+            Assert.That(route.Values["format"], Is.EqualTo("html"));
+        }
+
+        [Test]
+        public void ShouldIgnoreUnsupportedMediaTypes()
+        {
+            var map = new MediaTypeFormatMap();
+            map.Add("text/plain", "text");
+            map.Add("application/xml", "xml");
+            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var route = new RouteData();
+
+            router.AddFormat(route, new[] {"text/html", "application/xml"});
+
+            Assert.That(route.Values["format"], Is.EqualTo("xml"));
+        }
+
+        [Test]
+        public void ShouldPrioritizeFormatSelectionByMapEntriesIfAskedTo()
+        {
+            var map = new MediaTypeFormatMap();
+            map.Add("text/html", "html");
+            map.Add("application/xml", "xml");
+            var router = new SimpleContentNegotiationRouteProxy(null, map, ConnegPriorityGivenTo.Server);
+            var route = new RouteData();
+
+            router.AddFormat(route, new[] {"application/xml", "text/html"});
 
             Assert.That(route.Values["format"], Is.EqualTo("html"));
         }
@@ -81,11 +109,11 @@ namespace RestMvc.UnitTests.Conneg
         public void UnsupportedAcceptTypeMapsToDefaultFormat()
         {
             var map = new MediaTypeFormatMap();
-            map.Add("text/xml", "xml");
+            map.Add("application/xml", "xml");
             var router = new SimpleContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
-            router.AddFormat(route, new[] { "audio/*" });
+            router.AddFormat(route, new[] {"audio/*"});
 
             Assert.That(route.Values["format"], Is.EqualTo("xml"));
         }

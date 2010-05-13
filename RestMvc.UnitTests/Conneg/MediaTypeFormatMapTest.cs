@@ -39,6 +39,14 @@ namespace RestMvc.UnitTests.Conneg
         }
 
         [Test]
+        public void ShouldNotSupportNonAddsedMediaTypeWithoutWildcard()
+        {
+            var map = new MediaTypeFormatMap();
+            map.Add("text/html", "html");
+            Assert.That(map.SupportsMediaType("text/plain"), Is.False);
+        }
+
+        [Test]
         public void ShouldReturnNullFormatIfUnsupportedMediaTypeRequested()
         {
             var map = new MediaTypeFormatMap();
@@ -54,10 +62,19 @@ namespace RestMvc.UnitTests.Conneg
         }
 
         [Test]
+        public void MapShouldTakePriorityOverParameterMediaTypes()
+        {
+            var map = new MediaTypeFormatMap();
+            map.Add("text/html", "html");
+            map.Add("application/xml", "xml");
+            Assert.That(map.FormatFor("application/xml", "text/html"), Is.EqualTo("html"));
+        }
+
+        [Test]
         public void EmptyMapHasNoDefaultFormat()
         {
             var map = new MediaTypeFormatMap();
-            Assert.That(map.DefaultFormat, Is.EqualTo(""));
+            Assert.That(map.DefaultFormat, Is.Null);
         }
 
         [Test]
