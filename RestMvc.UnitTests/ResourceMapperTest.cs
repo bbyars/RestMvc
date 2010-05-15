@@ -36,6 +36,15 @@ namespace RestMvc.UnitTests
             public void Test() { }
         }
 
+        public class TunnelledController : RestfulController
+        {
+            [Put("test")]
+            public void Put() { }
+
+            [Delete("test")]
+            public void Delete() { }
+        }
+
         [Test]
         public void ControllerWithNoResourcesShouldNotMapsOptions()
         {
@@ -143,6 +152,18 @@ namespace RestMvc.UnitTests
 
             Assert.That("OPTIONS /test", Routes.To(
                 new {controller = "Restful", action = "Options", resourceUri = "Test", controllerType = typeof(DifferentSuperclassController)}, routes));
+        }
+
+        [Test]
+        public void ShouldMapTunnelledRoutes()
+        {
+            var routes = new RouteCollection();
+            var mapper = new ResourceMapper<TunnelledController>(routes, new MvcRouteHandler());
+
+            mapper.MapTunnelledMethods();
+
+            Assert.That("POST /test _method=PUT", Routes.To(new {controller = "Tunnelled", action = "Put"}, routes));
+            Assert.That("POST /test _method=DELETE", Routes.To(new {controller = "Tunnelled", action = "Delete"}, routes));
         }
     }
 }

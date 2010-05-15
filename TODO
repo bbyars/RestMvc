@@ -8,3 +8,4 @@
 * Get build working on IIS < 7
 * Show RestMvc.Example RestfulController subclass overriding OPTIONS
 * Add Representation ViewResult
+* Try to split test classes by test controller, rather than having multiple controllers per file

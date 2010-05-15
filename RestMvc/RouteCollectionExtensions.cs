@@ -60,6 +60,7 @@ namespace RestMvc
             where TController : Controller
         {
             var mapper = new ResourceMapper<TController>(routes, routeHandler);
+            mapper.MapTunnelledMethods();
             mapper.MapSupportedMethods();
             mapper.MapUnsupportedMethods();
             mapper.MapHead();

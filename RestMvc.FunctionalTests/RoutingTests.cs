@@ -9,6 +9,7 @@ namespace RestMvc.FunctionalTests
     {
         private const string echoUri = "http://localhost/RestMvc/echo/hello";
         private const string nonRestfulUri = "http://localhost/RestMvc/nonRestful";
+        private const string tunnelledUri = "http://localhost/RestMvc/tunnelled";
 
         [Test]
         public void ShouldRouteToEchoAction()
@@ -80,6 +81,20 @@ namespace RestMvc.FunctionalTests
 
             Assert.That(headResponse.Body, Is.EqualTo(""));
             Assert.That(headResponse, HasSameHeaders.As(getResponse));
+        }
+
+        [Test]
+        public void ShouldTunnelPut()
+        {
+            var request = new HttpRequest("POST", tunnelledUri).WithPostData("_method", "PUT");
+            Assert.That(request.GetResponse().StatusCode, Is.EqualTo(200));
+        }
+
+        [Test]
+        public void ShouldTunnelDelete()
+        {
+            var request = new HttpRequest("POST", tunnelledUri).WithPostData("_method", "DELETE");
+            Assert.That(request.GetResponse().StatusCode, Is.EqualTo(200));
         }
     }
 }

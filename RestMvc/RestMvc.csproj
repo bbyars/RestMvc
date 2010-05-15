@@ -85,6 +85,7 @@
     <Compile Include="Conneg\MediaTypeFormatMap.cs" />
     <Compile Include="Conneg\SimpleContentNegotiationRouteProxy.cs" />
     <Compile Include="HttpContextWithReadableOutputStream.cs" />
+    <Compile Include="PostDataConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ResourceMapper.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 
 namespace RestMvc.FunctionalTests
 {
@@ -16,6 +17,17 @@ namespace RestMvc.FunctionalTests
         public HttpRequest WithAcceptTypes(params string[] acceptTypes)
         {
             webRequest.Accept = string.Join(", ", acceptTypes);
+            return this;
+        }
+
+        public HttpRequest WithPostData(string key, string value)
+        {
+            var buffer = Encoding.ASCII.GetBytes(string.Format("{0}={1}", key, value));
+            webRequest.ContentLength = buffer.Length;
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            var postData = webRequest.GetRequestStream();
+            postData.Write(buffer, 0, buffer.Length);
+            postData.Close();
             return this;
         }
 

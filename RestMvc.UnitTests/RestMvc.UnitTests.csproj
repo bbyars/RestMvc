@@ -84,6 +84,7 @@
     <Compile Include="Conneg\MediaTypeFormatMapTest.cs" />
     <Compile Include="Conneg\MediaTypeTest.cs" />
     <Compile Include="HttpContextWithReadableOutputStreamTest.cs" />
+    <Compile Include="PostDataConstraintTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensionsTest.cs" />
     <Compile Include="ResourceMapperTest.cs" />

@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
+using RestMvc.Attributes;
 
 namespace RestMvc
 {
@@ -79,6 +81,26 @@ namespace RestMvc
             MapAllResources("Options");
         }
 
+        /// <summary>
+        /// Maps all the routes provided by PutAttribute and DeleteAttribute annotations
+        /// tunnelled through a POST routes, as long as the post data contains
+        /// a key matching postDataKey, and a value of either PUT or DELETE.
+        /// This is needed for browser support.
+        /// </summary>
+        public virtual void MapTunnelledMethods(string postDataKey = "_method")
+        {
+            var putsAndDeletes = typeof(TController).GetResourceActions()
+                .Where(action => action.IsDefined(typeof(PutAttribute), true)
+                    || action.IsDefined(typeof(DeleteAttribute), true));
+
+            foreach (var action in putsAndDeletes)
+            {
+                var attribute = action.GetResourceActionAttribute();
+                foreach (var uri in attribute.ResourceUris)
+                    Map(uri, Defaults(action.Name), attribute.HttpMethod, postDataKey);
+            }
+        }
+
         private void MapAllResources(string method)
         {
             foreach (var resourceUri in typeof(TController).GetResourceUris())
@@ -94,6 +116,14 @@ namespace RestMvc
         {
             routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
+                routeHandler));
+        }
+
+        private void Map(string urlFormat, RouteValueDictionary defaults, string httpMethod, string postDataKey)
+        {
+            routes.Add(new Route(urlFormat, defaults,
+                new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint("POST")},
+                                          {"postData", new PostDataConstraint(postDataKey, httpMethod)}},
                 routeHandler));
         }
 
