@@ -15,7 +15,8 @@ namespace RestMvc
         /// The action called on any HTTP OPTIONS request.
         /// </summary>
         /// <param name="resourceUri">The URI template</param>
-        /// <returns>An empty result, with the Allow header set</returns>
+        /// <returns>An empty result, with the Allow header set.  Override in a subclass
+        /// and call SetAllowHeader to return content.</returns>
         public virtual ActionResult Options(string resourceUri)
         {
             SetAllowHeader(resourceUri);
@@ -47,7 +48,11 @@ namespace RestMvc
             Response.End();
         }
 
-        private void SetAllowHeader(string resourceUri)
+        /// <summary>
+        /// Sets the Allow header to all supported methods for the resourceUri.
+        /// </summary>
+        /// <param name="resourceUri">The URI template</param>
+        protected virtual void SetAllowHeader(string resourceUri)
         {
             Response.Headers["Allow"] = string.Join(", ", GetControllerType().GetSupportedMethods(resourceUri));
         }

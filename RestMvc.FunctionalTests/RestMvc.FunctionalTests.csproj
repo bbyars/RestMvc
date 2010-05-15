@@ -67,7 +67,9 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoutingTests.cs" />
+    <Compile Include="Routing\EchoControllerTest.cs" />
+    <Compile Include="Routing\NonRestfulControllerTest.cs" />
+    <Compile Include="Routing\TunnelledControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -86,6 +88,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

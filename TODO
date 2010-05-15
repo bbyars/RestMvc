@@ -1,5 +1,3 @@
 * Handle media type modifiers (e.g. text/html; q=0.8)
 ** Test backward routing (creating URLs) with multiple routes
-* Show RestMvc.Example RestfulController subclass overriding OPTIONS
 * Add Representation ViewResult
-* Try to split test classes by test controller, rather than having multiple controllers per file

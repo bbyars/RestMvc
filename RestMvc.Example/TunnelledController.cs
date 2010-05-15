@@ -13,7 +13,7 @@ namespace RestMvc.Example
         [Delete("/tunnelled")]
         public void Delete()
         {
-            Response.StatusCode = 200;
+            Response.StatusCode = 202;
         }
 
         [Post("/tunnelled")]

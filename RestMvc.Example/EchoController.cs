@@ -22,5 +22,11 @@ namespace RestMvc.Example
                 ContentType = MediaType.PlainText
             };
         }
+
+        public override ActionResult Options(string resourceUri)
+        {
+            SetAllowHeader(resourceUri);
+            return new ContentResult {Content = "Options body goes here..."};
+        }
     }
 }
