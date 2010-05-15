@@ -21,12 +21,7 @@ namespace RestMvc
         /// </summary>
         public static IEnumerable<MethodInfo> GetResourceActions(this Type type)
         {
-            var methods = type.GetMethods();
-            foreach (var method in methods)
-            {
-                if (method.GetResourceActionAttribute() != null)
-                    yield return method;
-            }
+            return type.GetMethods().Where(method => method.GetResourceActionAttribute() != null);
         }
 
         /// <summary>
@@ -67,7 +62,7 @@ namespace RestMvc
         public static string[] GetUnsupportedMethods(this Type type, string resourceUri)
         {
             var supportedMethods = type.GetSupportedMethods(resourceUri);
-            return new[] { "GET", "POST", "PUT", "DELETE" }
+            return new[] {"GET", "POST", "PUT", "DELETE"}
                 .Where(method => !supportedMethods.Contains(method)).ToArray();
         }
 

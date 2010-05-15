@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
@@ -45,11 +45,8 @@ namespace RestMvc.FunctionalTests.Assertions
 
         private static string Description(NameValueCollection headers)
         {
-            var lines = new List<string>();
-            foreach (string header in headers.Keys)
-                lines.Add(string.Format("{0}: {1}", header, headers[header]));
-            return string.Join(Environment.NewLine, lines.ToArray());
-
+            var lines = (from string header in headers.Keys select string.Format("{0}: {1}", header, headers[header])).ToArray();
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

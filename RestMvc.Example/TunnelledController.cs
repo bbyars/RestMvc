@@ -19,7 +19,7 @@ namespace RestMvc.Example
         [Post("/tunnelled")]
         public void Post()
         {
-            Response.StatusCode = 405;
+            Response.StatusCode = 201;
         }
     }
 }

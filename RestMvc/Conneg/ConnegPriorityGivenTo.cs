@@ -7,7 +7,7 @@ namespace RestMvc.Conneg
     /// According to the spec, the client takes priority, but I added server
     /// priority as a way to work around what I consider to be a bug in
     /// Google Chrome - despite its inability to natively render XML,
-    /// Chrome claims to prefer XML over HTML.
+    /// Chrome claims to prefer XML over HTML in the Accept header.
     /// </summary>
     public enum ConnegPriorityGivenTo
     {

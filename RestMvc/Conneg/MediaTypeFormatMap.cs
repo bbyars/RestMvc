@@ -45,12 +45,9 @@ namespace RestMvc.Conneg
         /// </summary>
         public virtual string FormatFor(params string[] mediaTypes)
         {
-            foreach (var pair in map)
-            {
-                if (mediaTypes.Any(mediaType => pair.Key.Matches(mediaType)))
-                    return pair.Value;
-            }
-            return null;
+            return map.Where(pair => mediaTypes.Any(mediaType => pair.Key.Matches(mediaType)))
+                .Select(pair => pair.Value)
+                .FirstOrDefault();
         }
     }
 }
