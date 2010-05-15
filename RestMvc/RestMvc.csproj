@@ -83,7 +83,7 @@
     <Compile Include="Conneg\ConnegPriorityGivenTo.cs" />
     <Compile Include="Conneg\MediaType.cs" />
     <Compile Include="Conneg\MediaTypeFormatMap.cs" />
-    <Compile Include="Conneg\SimpleContentNegotiationRouteProxy.cs" />
+    <Compile Include="Conneg\ContentNegotiationRouteProxy.cs" />
     <Compile Include="HttpContextWithReadableOutputStream.cs" />
     <Compile Include="PostDataConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

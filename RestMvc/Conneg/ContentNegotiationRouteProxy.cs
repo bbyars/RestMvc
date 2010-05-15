@@ -10,7 +10,7 @@ namespace RestMvc.Conneg
     /// negotiation based on the prioritized associations that the application declares
     /// in the MediaTypeFormatMap passed in.
     /// </summary>
-    public class SimpleContentNegotiationRouteProxy : IRouteHandler
+    public class ContentNegotiationRouteProxy : IRouteHandler
     {
         private readonly IRouteHandler proxiedHandler;
         private readonly MediaTypeFormatMap map;
@@ -24,7 +24,7 @@ namespace RestMvc.Conneg
         /// <param name="priority">Whether the client sets the priority or the server.  The HTTP spec
         /// indicates that the client should set it, but on occasion the server may need to set it
         /// to work around bugs in browsers (e.g. Chrome prioritizes xml over html).</param>
-        public SimpleContentNegotiationRouteProxy(IRouteHandler proxiedHandler, MediaTypeFormatMap map,
+        public ContentNegotiationRouteProxy(IRouteHandler proxiedHandler, MediaTypeFormatMap map,
             ConnegPriorityGivenTo priority = ConnegPriorityGivenTo.Client)
         {
             this.proxiedHandler = proxiedHandler;

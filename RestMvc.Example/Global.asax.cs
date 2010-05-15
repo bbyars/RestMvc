@@ -13,7 +13,7 @@ namespace RestMvc.Example
             var map = new MediaTypeFormatMap();
             map.Add(MediaType.PlainText, "text");
             map.Add(MediaType.Xml, "xml");
-            var connegHandler = new SimpleContentNegotiationRouteProxy(new MvcRouteHandler(), map);
+            var connegHandler = new ContentNegotiationRouteProxy(new MvcRouteHandler(), map);
 
             RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly(), connegHandler);
         }

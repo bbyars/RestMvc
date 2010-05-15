@@ -8,14 +8,14 @@ using RestMvc.Conneg;
 namespace RestMvc.UnitTests.Conneg
 {
     [TestFixture]
-    public class SimpleContentNegotiationRouteProxyTest
+    public class ContentNegotiationRouteProxyTest
     {
         [Test]
         public void ShouldMapMediaTypeToFormat()
         {
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] {"*/*"});
@@ -28,7 +28,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
             route.Values["format"] = "html";
 
@@ -42,7 +42,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new string[0]);
@@ -55,7 +55,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, null);
@@ -69,7 +69,7 @@ namespace RestMvc.UnitTests.Conneg
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
             map.Add("text/html", "html");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] {"text/html", "application/xml"});
@@ -83,7 +83,7 @@ namespace RestMvc.UnitTests.Conneg
             var map = new MediaTypeFormatMap();
             map.Add("text/plain", "text");
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] {"text/html", "application/xml"});
@@ -97,7 +97,7 @@ namespace RestMvc.UnitTests.Conneg
             var map = new MediaTypeFormatMap();
             map.Add("text/html", "html");
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map, ConnegPriorityGivenTo.Server);
+            var router = new ContentNegotiationRouteProxy(null, map, ConnegPriorityGivenTo.Server);
             var route = new RouteData();
 
             router.AddFormat(route, new[] {"application/xml", "text/html"});
@@ -110,7 +110,7 @@ namespace RestMvc.UnitTests.Conneg
         {
             var map = new MediaTypeFormatMap();
             map.Add("application/xml", "xml");
-            var router = new SimpleContentNegotiationRouteProxy(null, map);
+            var router = new ContentNegotiationRouteProxy(null, map);
             var route = new RouteData();
 
             router.AddFormat(route, new[] {"audio/*"});
@@ -125,7 +125,7 @@ namespace RestMvc.UnitTests.Conneg
             var httpContext = new Mock<HttpContextBase>();
             httpContext.Setup(ctx => ctx.Request.AcceptTypes).Returns(new string[0]);
             var request = new RequestContext(httpContext.Object, new RouteData());
-            var router = new SimpleContentNegotiationRouteProxy(proxiedHandler.Object, new MediaTypeFormatMap());
+            var router = new ContentNegotiationRouteProxy(proxiedHandler.Object, new MediaTypeFormatMap());
 
             router.GetHttpHandler(request);
 

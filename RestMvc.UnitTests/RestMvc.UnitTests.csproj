@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ResourceActionAttributeTest.cs" />
-    <Compile Include="Conneg\SimpleContentNegotiationRouteProxyTest.cs" />
+    <Compile Include="Conneg\ContentNegotiationRouteProxyTest.cs" />
     <Compile Include="Conneg\MediaTypeFormatMapTest.cs" />
     <Compile Include="Conneg\MediaTypeTest.cs" />
     <Compile Include="HttpContextWithReadableOutputStreamTest.cs" />
