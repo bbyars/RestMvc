@@ -87,6 +87,7 @@
     <Compile Include="PostDataConstraintTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensionsTest.cs" />
+    <Compile Include="RepresentationTest.cs" />
     <Compile Include="ResourceMapperTest.cs" />
     <Compile Include="ResponseWithReadableOutputStreamTest.cs" />
     <Compile Include="RestfulControllerTest.cs" />

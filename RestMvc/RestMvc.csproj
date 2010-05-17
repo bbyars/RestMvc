@@ -88,6 +88,7 @@
     <Compile Include="PostDataConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Representation.cs" />
     <Compile Include="ResourceMapper.cs" />
     <Compile Include="ResponseWithReadableOutputStream.cs" />
     <Compile Include="RestfulController.cs" />
