@@ -1,4 +1,4 @@
 * Handle media type modifiers
 ** e.g. audio/*; q=0.2, audio/basic should prioritize audio/basic over other audio types
 ** see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
-* Add Representation ViewResult
+* HEAD does not work correctly with filters (e.g. result filter that changes the content-type)
