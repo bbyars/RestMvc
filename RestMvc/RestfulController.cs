@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Web.Mvc;
 
 namespace RestMvc
@@ -29,7 +30,9 @@ namespace RestMvc
         /// <param name="resourceUri">The URI template</param>
         public virtual void Head(string resourceUri)
         {
-            Response.Headers["Content-Length"] = GetResourceOutput(resourceUri).Length.ToString();
+            var action = GetControllerType().GetAction("GET", resourceUri);
+            RouteData.Values["action"] = action.Name;
+            Response.Headers["Content-Length"] = GetResourceOutput(action).Length.ToString();
             Response.Headers["Content-Type"] = string.Format("{0}; charset={1}", Response.ContentType, Response.Charset);
             Response.SuppressContent = true;
             Response.End();
@@ -62,9 +65,8 @@ namespace RestMvc
             return (Type)RouteData.Values["controllerType"] ?? GetType();
         }
 
-        private string GetResourceOutput(string resourceUri)
+        private string GetResourceOutput(MethodInfo action)
         {
-            var action = GetControllerType().GetAction("GET", resourceUri);
             var controller = GetController();
 
             using (var proxy = new HttpContextWithReadableOutputStream(controller))

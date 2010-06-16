@@ -161,5 +161,18 @@ namespace RestMvc.UnitTests
                 Assert.That(controller.Response.Headers["Content-Length"], Is.EqualTo("test".Length.ToString()));
             }
         }
+
+        [Test]
+        public void HeadShouldChangeRouteAction()
+        {
+            // For example, the Representation class depends on the route action, and would
+            // fail if called under the context of a HEAD call
+            var controller = new TestController().WithStubbedContext()
+                .WithRouteValue("action", "Head");
+
+            controller.Head("test");
+
+            Assert.That(controller.RouteData.Values["action"], Is.EqualTo("Index"));
+        }
     }
 }
