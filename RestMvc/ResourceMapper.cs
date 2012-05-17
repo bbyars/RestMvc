@@ -116,6 +116,7 @@ namespace RestMvc
         {
             routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
+                new RouteValueDictionary { { "Namespaces", new[] { typeof(TController).Namespace} } },
                 routeHandler));
         }
 
@@ -124,6 +125,7 @@ namespace RestMvc
             routes.Add(new Route(urlFormat, defaults,
                 new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint("POST")},
                                           {"postData", new PostDataConstraint(postDataKey, httpMethod)}},
+                new RouteValueDictionary { { "Namespaces", new[] { typeof(TController).Namespace } } },
                 routeHandler));
         }
 
