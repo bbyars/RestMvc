@@ -26,7 +26,17 @@ task Package {
   if (Test-Path Env:\GO_PIPELINE_LABEL) {
     $version = $($Env:GO_PIPELINE_LABEL)
   }
-  Dependencies\nuget\nuget.exe pack RestMvc.Example.nuspec -Version $version -OutputDirectory build -NoPackageAnalysis
+  Dependencies\nuget\nuget.exe pack RestMvc.Example.nuspec -Version $version -OutputDirectory $buildDir -NoPackageAnalysis
+}
+
+task TestPackage {
+  if (Test-Path "shower") {
+  	Remove-Item "shower" -Recurse -Force
+  }
+  
+  New-Item "shower" -ItemType Container
+  Dependencies\nuget\nuget.exe Install -Source $buildDir -OutputDirectory "shower" RestMvc.Example
+  shower\RestMvc.Example.1.0.0\Install.ps1
 }
 
 task ? -Description "Helper to display task info" {

@@ -12,5 +12,6 @@
   </metadata>
   <files>
     <file src="RestMvc.Example\**\*.*" target="content" />
+    <file src="Install.ps1" target="" />
   </files>
 </package>
