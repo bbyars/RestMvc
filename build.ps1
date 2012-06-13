@@ -4,6 +4,8 @@ properties {
   $buildDir = "$rootDir\build"
 }
 
+task default -Depends Clean, Compile
+
 task Clean { 
   if (Test-Path $buildDir) {
   	Remove-Item $buildDir -Recurse -Force
@@ -16,7 +18,15 @@ task Compile {
 }
 
 task Package {
-	Exec { msbuild RestMvc.Example\RestMvc.Example.csproj /t:Rebuild /t:ResolveReferences /p:Configuration=Release /p:WebProjectOutputDir=build\web\ /p:OutDir=build\web\ }
+  if (-not (Test-Path $buildDir)) {
+    New-Item $buildDir -ItemType Container
+  }
+
+  $version = '1.0.0'
+  if (Test-Path Env:\GO_PIPELINE_LABEL) {
+    $version = $($Env:GO_PIPELINE_LABEL)
+  }
+  Dependencies\nuget\nuget.exe pack RestMvc.Example.nuspec -Version $version -OutputDirectory build -NoPackageAnalysis
 }
 
 task ? -Description "Helper to display task info" {
