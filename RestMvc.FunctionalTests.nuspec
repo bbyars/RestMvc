@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>RestMvc.Example</id>
+    <id>RestMvc.FunctionalTests</id>
     <version>1.0.0</version>
-    <title>RestMvc.Example</title>
-    <description>An example website using RestMvc</description>
+    <title>RestMvc.FunctionalTests</title>
+    <description>Functional test suite for RestMvc</description>
     <tags>mvc</tags>
     <authors>Brandon Byars</authors>
     <projectUrl>https://github.com/bbyars/RestMvc</projectUrl>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
   </metadata>
   <files>
-    <file src="RestMvc.Example\**\*.*" target="content" />
-    <file src="Install.ps1" target="" />
+    <file src="RestMvc.FunctionalTests\bin\Release\*.dll" target="content" />
   </files>
 </package>
