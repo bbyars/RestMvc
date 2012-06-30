@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>RestMvc.Example</id>
+    <id>RestMvc</id>
     <version>1.0.0</version>
-    <title>RestMvc.Example</title>
-    <description>An example website using RestMvc</description>
+    <title>RestMvc</title>
+    <description>Restful awesomeness for ASP.NET MVC</description>
     <tags>mvc</tags>
     <authors>Brandon Byars</authors>
     <projectUrl>https://github.com/bbyars/RestMvc</projectUrl>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
   </metadata>
   <files>
-    <file src="RestMvc.Example\**\*.*" target="content" />
-    <file src="Install.ps1" target="" />
+    <file src="RestMvc\bin\Release\*.dll" target="content" />
+    <file src="RestMvc\bin\Release\*.xml" target="" />
   </files>
 </package>
