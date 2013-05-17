@@ -1,12 +1,11 @@
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace RestMvc.FunctionalTests.Routing
 {
     [TestFixture]
     public class TunnelledControllerTest
     {
-        private const string uri = "http://localhost/RestMvc/tunnelled";
+        private const string uri = "http://localhost:26920/RestMvc/tunnelled";
 
         [Test]
         public void ShouldTunnelPut()

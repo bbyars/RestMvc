@@ -1,12 +1,11 @@
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace RestMvc.FunctionalTests
 {
     [TestFixture]
     public class ConnegTests
     {
-        private const string echoUri = "http://localhost/RestMvc/echo/hello";
+        private const string echoUri = "http://localhost:26920/RestMvc/echo/hello";
 
         [Test]
         public void ShouldSendPlainTextIfNoAcceptTypeGiven()

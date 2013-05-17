@@ -1,8 +1,8 @@
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.SessionState;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Attributes;
 
 namespace RestMvc.UnitTests
@@ -52,6 +52,13 @@ namespace RestMvc.UnitTests
             {
                 return new DifferentSubclassController();
             }
+
+            public SessionStateBehavior GetControllerSessionBehavior(
+                RequestContext requestContext, string controllerName)
+                {
+                //ToDo: This was added in MVC4. What does it do? Should I implement it? [TPL]
+                throw new NotImplementedException();
+                }
 
             public void ReleaseController(IController controller) { }
 
