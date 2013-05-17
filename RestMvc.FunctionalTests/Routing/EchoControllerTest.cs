@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using RestMvc.FunctionalTests.Assertions;
 
 namespace RestMvc.FunctionalTests.Routing
