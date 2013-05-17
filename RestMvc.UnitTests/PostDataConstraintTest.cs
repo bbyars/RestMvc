@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace RestMvc.UnitTests
 {

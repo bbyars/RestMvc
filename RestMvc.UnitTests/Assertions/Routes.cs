@@ -8,7 +8,6 @@ using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace RestMvc.UnitTests.Assertions
 {
