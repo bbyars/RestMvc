@@ -1,1 +1,0 @@
-Dependencies\psake\tools\psake.cmd .\build.ps1 %*
