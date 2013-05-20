@@ -2,7 +2,6 @@ using System.Web;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Conneg;
 
 namespace RestMvc.UnitTests.Conneg

@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Conneg;
 
 namespace RestMvc.UnitTests.Conneg

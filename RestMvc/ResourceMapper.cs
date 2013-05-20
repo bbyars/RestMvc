@@ -113,21 +113,33 @@ namespace RestMvc
         }
 
         private void Map(string urlFormat, RouteValueDictionary defaults, string httpMethod)
-        {
-            routes.Add(new Route(urlFormat, defaults,
-                new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}},
-                new RouteValueDictionary { { "Namespaces", new[] { typeof(TController).Namespace} } },
-                routeHandler));
-        }
+            {
+            var constraints = new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint(httpMethod)}};
+            var dataTokens = new RouteValueDictionary {{"Namespaces", new[] {typeof(TController).Namespace}}};
+            var route = new Route(urlFormat, defaults, constraints, dataTokens, routeHandler)
+                {
+                    RouteExistingFiles = false // [TPL] Otherwise "thing.format" will be interpreted as a filename
+                };
+            routes.Add(route);
+            }
 
         private void Map(string urlFormat, RouteValueDictionary defaults, string httpMethod, string postDataKey)
-        {
-            routes.Add(new Route(urlFormat, defaults,
-                new RouteValueDictionary {{"httpMethod", new HttpMethodConstraint("POST")},
-                                          {"postData", new PostDataConstraint(postDataKey, httpMethod)}},
-                new RouteValueDictionary { { "Namespaces", new[] { typeof(TController).Namespace } } },
-                routeHandler));
-        }
+            {
+            var constraints = new RouteValueDictionary
+                {
+                    {"httpMethod", new HttpMethodConstraint("POST")},
+                    {"postData", new PostDataConstraint(postDataKey, httpMethod)}
+                };
+            var dataTokens = new RouteValueDictionary
+                {
+                    {"Namespaces", new[] {typeof(TController).Namespace}}
+                };
+            var route = new Route(urlFormat, defaults, constraints, dataTokens, routeHandler)
+                {
+                    RouteExistingFiles = false  // [TPL] Otherwise "thing.format" will be interpreted as a filename
+                };
+            routes.Add(route);
+            }
 
         private static RouteValueDictionary Defaults(string actionName)
         {

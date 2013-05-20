@@ -1,12 +1,11 @@
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace RestMvc.FunctionalTests
 {
     [TestFixture]
     public class ConnegTests
     {
-        private const string echoUri = "http://localhost/RestMvc/echo/hello";
+        private const string echoUri = "http://localhost:26920/RestMvc/echo/hello";
 
         [Test]
         public void ShouldSendPlainTextIfNoAcceptTypeGiven()
@@ -14,7 +13,7 @@ namespace RestMvc.FunctionalTests
             var request = new HttpRequest("GET", echoUri).WithAcceptTypes("");
             var response = request.GetResponse();
 
-            Assert.That(response.ContentType, Text.StartsWith("text/plain"));
+            Assert.That(response.ContentType, Is.StringStarting("text/plain"));
             Assert.That(response.Body, Is.EqualTo("hello"));
         }
 
@@ -24,7 +23,7 @@ namespace RestMvc.FunctionalTests
             var request = new HttpRequest("GET", echoUri).WithAcceptTypes("text/html", "application/xml");
             var response = request.GetResponse();
 
-            Assert.That(response.ContentType, Text.StartsWith("application/xml"));
+            Assert.That(response.ContentType, Is.StringStarting("application/xml"));
             Assert.That(response.Body, Is.EqualTo("<echo>hello</echo>"));
         }
 
@@ -34,7 +33,7 @@ namespace RestMvc.FunctionalTests
             var request = new HttpRequest("GET", echoUri).WithAcceptTypes("audio/*", "text/csv");
             var response = request.GetResponse();
 
-            Assert.That(response.ContentType, Text.StartsWith("text/plain"));
+            Assert.That(response.ContentType, Is.StringStarting("text/plain"));
         }
 
         [Test]
@@ -43,7 +42,7 @@ namespace RestMvc.FunctionalTests
             var request = new HttpRequest("GET", echoUri).WithAcceptTypes("application/xml", "text/plain");
             var response = request.GetResponse();
 
-            Assert.That(response.ContentType, Text.StartsWith("application/xml"));
+            Assert.That(response.ContentType, Is.StringStarting("application/xml"));
         }
 
         [Test]
@@ -53,7 +52,7 @@ namespace RestMvc.FunctionalTests
             var response = request.GetResponse();
 
             Assert.That(response.Body, Is.EqualTo("<echo>hello</echo>"));
-            Assert.That(response.ContentType, Text.StartsWith("application/xml"));
+            Assert.That(response.ContentType, Is.StringStarting("application/xml"));
         }
     }
 }

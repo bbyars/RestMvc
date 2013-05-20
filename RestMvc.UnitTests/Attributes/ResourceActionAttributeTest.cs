@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using RestMvc.Attributes;
 
 namespace RestMvc.UnitTests.Attributes
