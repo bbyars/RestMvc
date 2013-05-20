@@ -1,4 +1,4 @@
-1. What is RestMVC
+# What is RestMVC
 
 RestMvc is a simple library for building RESTful services in ASP.NET MVC.
 It's primary purpose is to provide routing and content negotiation (conneg).
@@ -6,29 +6,29 @@ The routing differs from other RESTful routing libraries, like SimplyRestful,
 in that the route is defined alongside the action that receives the route.
 It was largely inspired by the Ruby framework Sinatra (http://www.sinatrarb.com/).
 
-2. Examples
+# Examples
 
-public class OrdersController : Controller
-{
-    [Get("/orders")]
-    public ActionResult Index() { ... }
+    public class OrdersController : Controller
+    {
+        [Get("/orders")]
+        public ActionResult Index() { ... }
 
-    [Post("/orders"]
-    public ActionResult Create() { ... }
+        [Post("/orders"]
+        public ActionResult Create() { ... }
 
-    [Get("/orders/{id}.format", "/orders/{id}")]
-    public ActionResult Show(string id) { ... }
+        [Get("/orders/{id}.format", "/orders/{id}")]
+        public ActionResult Show(string id) { ... }
 
-    [Put("/orders/{id}")]
-    public ActionResult Edit(string id) { ... }
+        [Put("/orders/{id}")]
+        public ActionResult Edit(string id) { ... }
 
-    [Delete("/orders/{id}")]
-    public ActionResult Destroy(string id) { ... }
-}
+        [Delete("/orders/{id}")]
+        public ActionResult Destroy(string id) { ... }
+    }
 
-// In Global.asax.cs
-RouteTable.Routes.Map<OrdersController>();
-// or RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly());
+    // In Global.asax.cs
+    RouteTable.Routes.Map<OrdersController>();
+    // or RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly());
 
 The code above will do the following:
 * Create the routes defined by the HTTP methods and URI templates in the attributes.
@@ -64,16 +64,16 @@ they define the IRouteHandler internally, which removes your ability to add
 any custom hooks into the routing process.  My hope is that providing the
 functionality as a decorator allows for more flexibility.
 
-// In Global.asax.cs
-var map = new MediaTypeFormatMap();
-map.Add(MediaType.Html, "html");
-map.Add(MediaType.Xhtml, "html");
-map.Add(MediaType.Xml, xml");
+    // In Global.asax.cs
+    var map = new MediaTypeFormatMap();
+    map.Add(MediaType.Html, "html");
+    map.Add(MediaType.Xhtml, "html");
+    map.Add(MediaType.Xml, xml");
 
-var connegRouter = new ContentNegotiationRouteProxy(new MvcRouteHandler(), map);
+    var connegRouter = new ContentNegotiationRouteProxy(new MvcRouteHandler(), map);
 
-RouteTable.Routes.Map<OrdersController>(connegRouter);
-// or RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly(), connedRouter);
+    RouteTable.Routes.Map<OrdersController>(connegRouter);
+    // or RouteTable.Routes.MapAssembly(Assembly.GetExecutingAssembly(), connedRouter);
 
 In the absence of a route URI template specifying the format explicitly,
 the connegDecorator will examine the Accept request header and pick the
@@ -89,7 +89,7 @@ to take priority.  This was added to work around what I consider to be a bug
 in Google Chrome - despite being unable to natively render XML, it prioritizes
 XML over HTML in its Accept header.
 
-3. Building RestMVC
+# Building RestMVC
 
 Hopefully, build.bat should do the trick.  RestMVC uses CM.NET,
 a build library I've developed hosted at http://github.com/bbyars/CM.NET.

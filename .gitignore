@@ -4,6 +4,8 @@ RestMvc/bin/
 RestMvc/obj/
 RestMvc.Example/bin/
 RestMvc.Example/obj/
+RestMvc.Example.Mvc4/bin/
+RestMvc.Example.Mvc4/obj/
 RestMvc.FunctionalTests/bin/
 RestMvc.FunctionalTests/obj/
 RestMvc.UnitTests/bin/
